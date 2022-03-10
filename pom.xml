@@ -3,74 +3,82 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.marketplace.services</groupId>
-	<artifactId>helloworld-service</artifactId>
-	  <version>1.0.1-SNAPSHOT</version>
+	<artifactId>contact-service</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>helloworld-service</name>
+	<name>Account Origination Service</name>
 
 	<parent>
-		<groupId>io.marketplace.commons</groupId>
-		<artifactId>marketplace-commons</artifactId>
-		<version>1.0.0</version>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.3.RELEASE</version>
+		<relativePath />
 	</parent>
-	
 	<scm>
-  <connection>${scm.connectionUrl}</connection>
-  <developerConnection>${scm.developerConnectionUrl}</developerConnection>
-  <tag>HEAD</tag>
-</scm>
-
+		<connection>${scm.connectionUrl}</connection>
+		<developerConnection>${scm.developerConnectionUrl}</developerConnection>
+		<tag>R1.0.1</tag>
+	</scm>
 
 	<properties>
-		<api.name>Hello World Service</api.name>
-		<api.groupName>Platform Services</api.groupName>
+		<scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
+		<scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>
+		<maven.deploy.plugin.version>2.8</maven.deploy.plugin.version>
+		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+		<java.version>11</java.version>
+		<api.name>Contact Service</api.name>
+		<api.groupName>eCommerce Services</api.groupName>
 		<api.iconName>book</api.iconName>
-		<api.tags>ServiceName, Service Name</api.tags>
+		<api.tags>Open Account</api.tags>
 		<is.api>true</is.api>
-		<marketplace.api.common.version>1.0.0</marketplace.api.common.version>
-		<marketplace.jwt.common.version>1.0.0</marketplace.jwt.common.version>
-		<marketplace.exception.common.version>1.0.12</marketplace.exception.common.version>
-		<marketplace.model.common.version>1.0.0</marketplace.model.common.version>
-		<marketplace.utils.version>1.0.0</marketplace.utils.version>
+		<api.version>2.2.0</api.version>
+		<marketplace.api.common.version>1.0.25</marketplace.api.common.version>
+		<marketplace.jwt-common.version>1.0.40</marketplace.jwt-common.version>
+		<marketplace.exception.common.version>1.0.22</marketplace.exception.common.version>
+		<marketplace.data.common.version>1.0.11</marketplace.data.common.version>
+		<marketplace.model.common.version>1.0.46</marketplace.model.common.version>
+		<marketplace.utils.version>1.0.21</marketplace.utils.version>
+		<marketplace.logging.common.version>1.0.6</marketplace.logging.common.version>
+		<marketplace.logging.impl.common.version>1.0.8</marketplace.logging.impl.common.version>
+		<partner.xchange.service.client.version>1.0.46</partner.xchange.service.client.version>
 
+		<commons.lang.version>3.0</commons.lang.version>
+		<modelmapper.version>2.3.5</modelmapper.version>
 		<ch.qos.logback.version>1.1.7</ch.qos.logback.version>
 		<ch.qos.logback.contrib.version>0.1.5</ch.qos.logback.contrib.version>
 		<de.gessnerfl.logback.version>0.1.0</de.gessnerfl.logback.version>
 		<logback.access.version>2.5.0</logback.access.version>
 
-		<spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+		<spring.boot.version>2.3.3.RELEASE</spring.boot.version>
 		<jackson.databind.version>2.7.4</jackson.databind.version>
 		<jackson.version>2.9.8</jackson.version>
 
-		<swagger.version>2.7.0</swagger.version>
-		<scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
-   <scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>	
-   <maven.deploy.plugin.version>2.8</maven.deploy.plugin.version>		
-   <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+		<postgresql.version>42.2.2</postgresql.version>
+		<spring.boot.version>2.3.3.RELEASE</spring.boot.version>
+		<spring.security.version>5.3.4.RELEASE</spring.security.version>
+		<spring.kafka.version>2.5.5.RELEASE</spring.kafka.version>
+		<org.hsqldb.version>2.4.0</org.hsqldb.version>
+		<postgresql.version>42.2.14</postgresql.version>
+		<liquibase.version>3.8.9</liquibase.version>
 	</properties>
 
 	<dependencies>
 		<!-- Common Dependencies -->
-		<dependency>
-			<groupId>io.101digital</groupId>
-			<artifactId>identity-model</artifactId>
-			<version>1.0.0</version>
-		</dependency>
 
 		<dependency>
 			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-model-common</artifactId>
-			<version>1.0.12</version>
+			<artifactId>marketplace-exception-common</artifactId>
+			<version>${marketplace.exception.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-exception-common</artifactId>
-			<version>1.0.16</version>
+			<artifactId>marketplace-model-common</artifactId>
+			<version>${marketplace.model.common.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.marketplace.commons</groupId>
 			<artifactId>marketplace-api-common</artifactId>
-			<version>1.0.11</version>
+			<version>${marketplace.api.common.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>io.springfox</groupId>
@@ -80,7 +88,81 @@
 					<groupId>io.springfox</groupId>
 					<artifactId>springfox-swagger-ui</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>io.marketplace.commons</groupId>
+					<artifactId>marketplace-logging-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.marketplace.commons</groupId>
+					<artifactId>marketplace-logging-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.marketplace.commons</groupId>
+					<artifactId>marketplace-jwt-common</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-jwt-common</artifactId>
+			<version>${marketplace.jwt-common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>jwks-rsa</artifactId>
+			<version>0.15.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-common</artifactId>
+			<version>${marketplace.logging.common.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-impl</artifactId>
+			<version>${marketplace.logging.impl.common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_hotspot</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-utils</artifactId>
+			<version>${marketplace.utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+			<version>2.1.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -97,77 +179,119 @@
 			<artifactId>jackson-databind-nullable</artifactId>
 			<version>0.1.0</version>
 		</dependency>
-		
 		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-logging-common</artifactId>
-			<version>1.0.6</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.lang.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-logging-impl</artifactId>
-			<version>1.0.0</version>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<version>2.10.1</version>
 		</dependency>
 		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-core</artifactId>
-			<version>1.1.3</version>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-			<version>1.1.3</version>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient_hotspot</artifactId>
-			<version>0.5.0</version>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>${spring.kafka.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-utils</artifactId>
-			<version>${marketplace.utils.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-			<version>${spring.boot.version}</version>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>${spring.boot.version}</version>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.services</groupId>
+			<artifactId>partner-xchange-service-client</artifactId>
+			<version>${partner.xchange.service.client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.6.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			
+
 			<plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
-            </plugin>
+				<groupId>pl.project13.maven</groupId>
+				<artifactId>git-commit-id-plugin</artifactId>
+				<version>4.0.0</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<failOnNoGitDirectory>false</failOnNoGitDirectory>
+					<includeOnlyProperties>
+						<includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+					</includeOnlyProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<additionalProperties>
+						<gitCommitId>${git.commit.id.abbrev}</gitCommitId>
+					</additionalProperties>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>${java.version}</release>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.21.0</version>
+			</plugin>
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>${maven.deploy.plugin.version}</version>
@@ -176,33 +300,51 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>${maven.release.plugin.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven.release.plugin.version}</version>
 				<configuration>
 					<tagNameFormat>R@{project.version}</tagNameFormat>
 				</configuration>
 			</plugin>
-			
 
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>4.2.3</version>
+				<version>4.3.1</version>
 				<executions>
 					<execution>
+						<id>api-generate</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
+							<templateDirectory>${project.basedir}/src/main/resources/META-INF/resources/templates/JavaSpring</templateDirectory>
+							<configurationFile>${project.basedir}/src/main/resources/META-INF/resources/codegen-config.json</configurationFile>
 							<inputSpec>
 								${project.basedir}/src/main/resources/META-INF/resources/api.yml
 							</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>io.marketplace.services.helloworld.api</apiPackage>
-							<modelPackage>io.marketplace.services.helloworld.model</modelPackage>
+							<generateModels>true</generateModels>
+							<apiPackage>io.marketplace.account.origination.service.api</apiPackage>
+							<modelPackage>io.marketplace.account.origination.service.model</modelPackage>
 							<supportingFilesToGenerate>
 								ApiUtil.java
 							</supportingFilesToGenerate>
+							<library>spring-boot</library>
 							<configOptions>
+								<additionalModelTypeAnnotations>@lombok.Data${line.separator}@lombok.Builder${line.separator}@lombok.NoArgsConstructor${line.separator}@lombok.AllArgsConstructor</additionalModelTypeAnnotations>
+								<serializableModel>true</serializableModel>
+								<useBeanValidation>true</useBeanValidation>
 								<delegatePattern>true</delegatePattern>
+								<serializationLibrary>gson</serializationLibrary>
+								<java8>true</java8>
+								<!--<dateLibrary>java8</dateLibrary>-->
+								<gson>true</gson>
+								<jackson>false</jackson>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -211,17 +353,4 @@
 
 		</plugins>
 	</build>
-	
-	<profiles>
-        <profile>
-            <id>101digital</id>
-            <activation>
-              <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
-                <scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>
-            </properties>
-        </profile>
-    </profiles>
 </project>

@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name;
+package io.marketplace.services.contact;
 
 import java.util.TimeZone;
 

@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name.service;
+package io.marketplace.services.contact.service;
 
 import java.util.ArrayList;
 import java.util.List;
