@@ -1,4 +1,4 @@
-# Service-Name APIs
+# Contact Service APIs
 ## Prerequisites
  In order to build the project, you will have to install the following:
 

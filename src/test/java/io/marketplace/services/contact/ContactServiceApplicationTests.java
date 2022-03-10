@@ -11,9 +11,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@SpringBootTest(classes = SpringTemplateServiceApplication.class)
+@SpringBootTest(classes = ContactServiceApplication.class)
 @RunWith(SpringRunner.class)
-public class SpringTemplateServiceApplicationTests {
+public class ContactServiceApplicationTests {
 
     @Autowired
     private ApplicationContext applicationContext;
