@@ -1,6 +1,5 @@
 package io.marketplace.services.contact.api.delegate;
 
-import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.service.ContactService;
 import org.openapitools.api.ContactsApiDelegate;
 import org.openapitools.model.BeneficiaryRecord;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ContactApiDelegateImpl implements ContactsApiDelegate {
 
     @Autowired
-    ContactService contactService;
+    private ContactService contactService;
 
     @Override
     public ResponseEntity<BeneficiaryResponse> getContactList(String userId,
