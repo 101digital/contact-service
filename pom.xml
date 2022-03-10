@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.marketplace.services</groupId>
+	<artifactId>helloworld-service</artifactId>
+	  <version>1.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>helloworld-service</name>
+
+	<parent>
+		<groupId>io.marketplace.commons</groupId>
+		<artifactId>marketplace-commons</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	
+	<scm>
+  <connection>${scm.connectionUrl}</connection>
+  <developerConnection>${scm.developerConnectionUrl}</developerConnection>
+  <tag>HEAD</tag>
+</scm>
+
+
+	<properties>
+		<api.name>Hello World Service</api.name>
+		<api.groupName>Platform Services</api.groupName>
+		<api.iconName>book</api.iconName>
+		<api.tags>ServiceName, Service Name</api.tags>
+		<is.api>true</is.api>
+		<marketplace.api.common.version>1.0.0</marketplace.api.common.version>
+		<marketplace.jwt.common.version>1.0.0</marketplace.jwt.common.version>
+		<marketplace.exception.common.version>1.0.12</marketplace.exception.common.version>
+		<marketplace.model.common.version>1.0.0</marketplace.model.common.version>
+		<marketplace.utils.version>1.0.0</marketplace.utils.version>
+
+		<ch.qos.logback.version>1.1.7</ch.qos.logback.version>
+		<ch.qos.logback.contrib.version>0.1.5</ch.qos.logback.contrib.version>
+		<de.gessnerfl.logback.version>0.1.0</de.gessnerfl.logback.version>
+		<logback.access.version>2.5.0</logback.access.version>
+
+		<spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+		<jackson.databind.version>2.7.4</jackson.databind.version>
+		<jackson.version>2.9.8</jackson.version>
+
+		<swagger.version>2.7.0</swagger.version>
+		<scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
+   <scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>	
+   <maven.deploy.plugin.version>2.8</maven.deploy.plugin.version>		
+   <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+	</properties>
+
+	<dependencies>
+		<!-- Common Dependencies -->
+		<dependency>
+			<groupId>io.101digital</groupId>
+			<artifactId>identity-model</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-model-common</artifactId>
+			<version>1.0.12</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-exception-common</artifactId>
+			<version>1.0.16</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-api-common</artifactId>
+			<version>1.0.11</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger2</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger-ui</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>swagger-ui</artifactId>
+			<version>3.25.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.parser.v3</groupId>
+			<artifactId>swagger-parser</artifactId>
+			<version>2.0.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-common</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-impl</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-core</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_hotspot</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-utils</artifactId>
+			<version>${marketplace.utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			
+			<plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven.deploy.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven.release.plugin.version}</version>
+				<configuration>
+					<tagNameFormat>R@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+			
+
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>4.2.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>
+								${project.basedir}/src/main/resources/META-INF/resources/api.yml
+							</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>io.marketplace.services.helloworld.api</apiPackage>
+							<modelPackage>io.marketplace.services.helloworld.model</modelPackage>
+							<supportingFilesToGenerate>
+								ApiUtil.java
+							</supportingFilesToGenerate>
+							<configOptions>
+								<delegatePattern>true</delegatePattern>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+	
+	<profiles>
+        <profile>
+            <id>101digital</id>
+            <activation>
+              <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
+                <scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>
+            </properties>
+        </profile>
+    </profiles>
+</project>
