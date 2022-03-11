@@ -31,7 +31,7 @@
 		<api.iconName>book</api.iconName>
 		<api.tags>Open Account</api.tags>
 		<is.api>true</is.api>
-		<api.version>2.2.0</api.version>
+		<api.version>1.0.0</api.version>
 		<marketplace.api.common.version>1.0.25-SNAPSHOT</marketplace.api.common.version>
 		<marketplace.jwt.common.version>1.0.40</marketplace.jwt.common.version>
 		<marketplace.exception.common.version>1.0.22</marketplace.exception.common.version>
