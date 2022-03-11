@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder(toBuilder = true)
@@ -69,5 +70,5 @@ public class BeneficiaryEntity extends Auditable{
     private String verificationStatus;
 
     @Column(name = "verification_at")
-    private String verificationAt;
+    private LocalDateTime verificationAt;
 }

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>io.marketplace.services</groupId>
-	<artifactId>contact-service</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>Contact Service</name>
 
 	<parent>
 		<groupId>io.marketplace.commons</groupId>
@@ -14,39 +10,45 @@
 		<version>1.0.1</version>
 	</parent>
 
+	<groupId>io.marketplace.services</groupId>
+	<artifactId>contact-service</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>Customer Validation Service</name>
+
 	<scm>
 		<connection>${scm.connectionUrl}</connection>
 		<developerConnection>${scm.developerConnectionUrl}</developerConnection>
-		<tag>R1.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
+		<api.name>Contact Service</api.name>
+		<api.groupName>Management Services</api.groupName>
+		<api.iconName>book</api.iconName>
+		<api.tags>Customer, KYC</api.tags>
+		<is.api>true</is.api>
+		<java.version>11</java.version>
+
 		<scm.connectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.connectionUrl>
 		<scm.developerConnectionUrl>scm:git:https://github.com/101digital/${project.artifactId}.git</scm.developerConnectionUrl>
 		<maven.deploy.plugin.version>2.8</maven.deploy.plugin.version>
 		<maven.release.plugin.version>2.5.3</maven.release.plugin.version>
-		<java.version>11</java.version>
-		<api.name>Contact Service</api.name>
-		<api.groupName>eCommerce Services</api.groupName>
-		<api.iconName>book</api.iconName>
-		<api.tags>Open Account</api.tags>
-		<is.api>true</is.api>
-		<api.version>1.0.0</api.version>
-		<marketplace.api.common.version>1.0.25-SNAPSHOT</marketplace.api.common.version>
+
+		<marketplace.api.common.version>1.0.25</marketplace.api.common.version>
 		<marketplace.jwt.common.version>1.0.40</marketplace.jwt.common.version>
 		<marketplace.exception.common.version>1.0.22</marketplace.exception.common.version>
 		<marketplace.model.common.version>1.0.46</marketplace.model.common.version>
 		<marketplace.utils.version>1.0.21</marketplace.utils.version>
+		<marketplace.data.common.version>1.0.11</marketplace.data.common.version>
+		<marketplace.oauth.common.version>1.0.0</marketplace.oauth.common.version>
 		<marketplace.logging.common.version>1.0.6</marketplace.logging.common.version>
 		<marketplace.logging.impl.common.version>1.0.8</marketplace.logging.impl.common.version>
-		<marketplace.email.common.version>1.0.16</marketplace.email.common.version>
-		<marketplace.accounting.common.version>1.1.28-SNAPSHOT</marketplace.accounting.common.version>
-		<marketplace.zendesk.common.version>1.0.2</marketplace.zendesk.common.version>
-		<marketplace.sharing.common.version>1.0.7</marketplace.sharing.common.version>
-		<marketplace.membership.client.version>1.0.5</marketplace.membership.client.version>
-		<notification.service.client.version>1.0.5</notification.service.client.version>
+		<partner.xchange.service.client.version>1.0.34</partner.xchange.service.client.version>
 
-		<partner.xchange.service.client.version>1.0.46</partner.xchange.service.client.version>
+		<marketplace.membership.client.version>1.0.7</marketplace.membership.client.version>
+		<marketplace.sharing.common.version>1.0.5</marketplace.sharing.common.version>
+		<!--<marketplace.template.common.version>1.0.12-SNAPSHOT</marketplace.template.common.version>-->
 
 		<ch.qos.logback.version>1.2.7</ch.qos.logback.version>
 		<ch.qos.logback.contrib.version>0.1.5</ch.qos.logback.contrib.version>
@@ -54,28 +56,21 @@
 		<logback.access.version>2.5.0</logback.access.version>
 
 		<spring.boot.version>2.2.9.RELEASE</spring.boot.version>
-		<spring.version>5.2.8.RELEASE</spring.version>
-		<javax.servlet.version>2.5</javax.servlet.version>
-		<spring.kafka.version>2.3.10.RELEASE</spring.kafka.version>
-		<kafka.clients.version>2.4.1</kafka.clients.version>
-
 		<spring-retry.version>1.2.2.RELEASE</spring-retry.version>
+		<javax.servlet.version>2.5</javax.servlet.version>
 
 		<spring.boot.ws.version>3.0.1.RELEASE</spring.boot.ws.version>
 		<velocity.version>1.7</velocity.version>
 		<velocity.tools.version>2.0</velocity.tools.version>
 		<hibernate.validator.version>6.0.11.Final</hibernate.validator.version>
 
-		<spring.kafka.version>2.2.4.RELEASE</spring.kafka.version>
+		<spring.kafka.version>2.3.10.RELEASE</spring.kafka.version>
+
+		<postgresql.version>42.2.25</postgresql.version>
+		<h2.version>1.4.197</h2.version>
 		<micrometer.version>1.1.3</micrometer.version>
 		<prometheus.client.version>0.5.0</prometheus.client.version>
-		<spring.boot.email.version>2.1.3.RELEASE</spring.boot.email.version>
-		<spring.boot.version>2.1.3.RELEASE</spring.boot.version>
-		<swagger.version>2.7.0</swagger.version>
-		<postgresql.version>42.3.2</postgresql.version>
-		<h2.version>1.4.197</h2.version>
-		<spring.aws.version>2.2.1.RELEASE</spring.aws.version>
-		<aws.sdk.version>1.11.595</aws.sdk.version>
+
 		<jackson.version>2.10.5</jackson.version>
 		<jackson.databind.version>2.10.5.1</jackson.databind.version>
 		<snakeyaml.version>1.26</snakeyaml.version>
@@ -87,9 +82,26 @@
 		<!-- Common Dependencies -->
 		<dependency>
 			<groupId>io.marketplace.commons</groupId>
+			<artifactId>membership-service-client</artifactId>
+			<version>${marketplace.membership.client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
 			<artifactId>marketplace-api-common</artifactId>
 			<version>${marketplace.api.common.version}</version>
 			<exclusions>
+				<exclusion>
+					<groupId>net.minidev</groupId>
+					<artifactId>json-smart</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-codec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.marketplace.commons</groupId>
+					<artifactId>marketplace-jwt-common</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>io.springfox</groupId>
 					<artifactId>springfox-swagger2</artifactId>
@@ -115,207 +127,15 @@
 					<groupId>com.nimbusds</groupId>
 					<artifactId>nimbus-jose-jwt</artifactId>
 				</exclusion>
-				<exclusion>
-					<groupId>net.minidev</groupId>
-					<artifactId>json-smart</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-codec</artifactId>
-				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.minidev/json-smart -->
 		<dependency>
 			<groupId>net.minidev</groupId>
 			<artifactId>json-smart</artifactId>
 			<version>2.4.7</version>
 		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-jwt-common</artifactId>
-			<version>${marketplace.jwt.common.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>net.minidev</groupId>
-					<artifactId>json-smart</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate.validator.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-exception-common</artifactId>
-			<version>${marketplace.exception.common.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-model-common</artifactId>
-			<version>${marketplace.model.common.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-utils</artifactId>
-			<version>${marketplace.utils.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>accounting-commons</artifactId>
-			<version>${marketplace.accounting.common.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-zendesk-common</artifactId>
-			<version>${marketplace.zendesk.common.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-sharing-common</artifactId>
-			<version>${marketplace.sharing.common.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.services</groupId>
-			<artifactId>partner-xchange-service-client</artifactId>
-			<version>${partner.xchange.service.client.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>membership-service-client</artifactId>
-			<version>${marketplace.membership.client.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.services</groupId>
-			<artifactId>notification-service-client</artifactId>
-			<version>${notification.service.client.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.datatype</groupId>
-					<artifactId>jackson-datatype-jsr310</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.marketplace.commons</groupId>
-					<artifactId>marketplace-utils</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.nimbusds</groupId>
-					<artifactId>nimbus-jose-jwt</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-logging-common</artifactId>
-			<version>${marketplace.logging.common.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.marketplace.commons</groupId>
-			<artifactId>marketplace-logging-impl</artifactId>
-			<version>${marketplace.logging.impl.common.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${ch.qos.logback.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>${ch.qos.logback.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback.contrib</groupId>
-			<artifactId>logback-json-classic</artifactId>
-			<version>${ch.qos.logback.contrib.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>de.gessnerfl.logback</groupId>
-			<artifactId>logback-gson-formatter</artifactId>
-			<version>${de.gessnerfl.logback.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-			<version>${micrometer.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient_hotspot</artifactId>
-			<version>${prometheus.client.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-			<version>2.1.3.RELEASE</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-			<version>${spring.boot.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-			<version>${spring.boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -338,6 +158,71 @@
 			<version>4.1.74.Final</version>
 		</dependency>
 		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-jwt-common</artifactId>
+			<version>${marketplace.jwt.common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>net.minidev</groupId>
+					<artifactId>json-smart</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-exception-common</artifactId>
+			<version>${marketplace.exception.common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-model-common</artifactId>
+			<version>${marketplace.model.common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.springfox</groupId>
+					<artifactId>springfox-swagger2</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-utils</artifactId>
+			<version>${marketplace.utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-common</artifactId>
+			<version>${marketplace.logging.common.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.marketplace.commons</groupId>
+			<artifactId>marketplace-logging-impl</artifactId>
+			<version>${marketplace.logging.common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>swagger-ui</artifactId>
 			<version>3.25.0</version>
@@ -348,43 +233,53 @@
 			<version>2.0.19</version>
 			<exclusions>
 				<exclusion>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-jsr310</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>com.fasterxml.jackson.core</groupId>
 					<artifactId>jackson-databind</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--		<dependency>-->
-		<!--			<groupId>org.openapitools</groupId>-->
-		<!--			<artifactId>jackson-databind-nullable</artifactId>-->
-		<!--			<version>0.1.0</version>-->
-		<!--		</dependency>-->
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.11</version>
+			<groupId>io.marketplace.services</groupId>
+			<artifactId>partner-xchange-service-client</artifactId>
+			<version>${partner.xchange.service.client.version}</version>
+		</dependency>
+		<!-- Log Dependencies -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${ch.qos.logback.version}</version>
 		</dependency>
 
-		<!--		<dependency>-->
-		<!--			<groupId>com.fasterxml.jackson.module</groupId>-->
-		<!--			<artifactId>jackson-module-jaxb-annotations</artifactId>-->
-		<!--			<version>2.10.1</version>-->
-		<!--		</dependency>-->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${ch.qos.logback.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback.contrib</groupId>
+			<artifactId>logback-json-classic</artifactId>
+			<version>${ch.qos.logback.contrib.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.gessnerfl.logback</groupId>
+			<artifactId>logback-gson-formatter</artifactId>
+			<version>${de.gessnerfl.logback.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-			<version>${spring.kafka.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-			<version>4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
-		</dependency>
+		<!-- Spring dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -395,15 +290,76 @@
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.6.1</version>
-			<scope>test</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>${spring.kafka.version}</version>
+		</dependency>
+
+		<!-- Required to use email validation -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validator.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.openapitools</groupId>
-			<artifactId>jackson-databind-nullable</artifactId>
-			<version>0.1.0</version>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<!-- <scope>test</scope> -->
+		</dependency>
+
+		<!-- Micro metrics -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-core</artifactId>
+			<version>${micrometer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${micrometer.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_hotspot</artifactId>
+			<version>${prometheus.client.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.databind.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler</artifactId>
+			<version>${netty.handler.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-to-slf4j</artifactId>
+			<version>${log4j.api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.nimbusds</groupId>
@@ -411,10 +367,19 @@
 			<version>9.15</version>
 		</dependency>
 	</dependencies>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Finchley.SR2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
@@ -446,51 +411,12 @@
 						</goals>
 					</execution>
 				</executions>
-				<configuration>
-					<additionalProperties>
-						<gitCommitId>${git.commit.id.abbrev}</gitCommitId>
-					</additionalProperties>
-					<includeSystemScope>true</includeSystemScope>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<release>${java.version}</release>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.21.0</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven.deploy.plugin.version}</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven.release.plugin.version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>${maven.release.plugin.version}</version>
-				<configuration>
-					<tagNameFormat>R@{project.version}</tagNameFormat>
-				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>4.3.1</version>
+				<version>5.1.0</version>
 				<executions>
 					<execution>
 						<id>api-generate</id>
@@ -498,11 +424,15 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
+							<templateDirectory>${project.basedir}/src/main/resources/META-INF/resources/templates/JavaSpring</templateDirectory>
+							<configurationFile>${project.basedir}/src/main/resources/META-INF/resources/codegen-config.json</configurationFile>
 							<inputSpec>
 								${project.basedir}/src/main/resources/META-INF/resources/api.yml
 							</inputSpec>
 							<generatorName>spring</generatorName>
 							<generateModels>true</generateModels>
+							<apiPackage>io.marketplace.services.contact.api</apiPackage>
+							<modelPackage>io.marketplace.services.contact.model</modelPackage>
 							<supportingFilesToGenerate>
 								ApiUtil.java
 							</supportingFilesToGenerate>
@@ -514,15 +444,45 @@
 								<delegatePattern>true</delegatePattern>
 								<serializationLibrary>gson</serializationLibrary>
 								<java8>true</java8>
-								<!--<dateLibrary>java8</dateLibrary>-->
+								<dateLibrary>java8-localdatetime</dateLibrary>
 								<gson>true</gson>
 								<jackson>false</jackson>
 							</configOptions>
+
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>${java.version}</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven.deploy.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven.release.plugin.version}</version>
+				<configuration>
+					<tagNameFormat>R@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+
 		</plugins>
+
+
 	</build>
+
 </project>
+

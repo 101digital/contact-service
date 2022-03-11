@@ -2,10 +2,12 @@ package io.marketplace.services.contact.service;
 
 
 import io.marketplace.commons.exception.GenericException;
+import io.marketplace.commons.logging.Logger;
+import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
+import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
-import org.openapitools.model.BeneficiaryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Service
 public class ContactService {
+    private static final Logger log = LoggerFactory.getLogger(ContactService.class);
 
     @Autowired
     private BeneficiaryRepository beneficiaryRepository;
@@ -41,7 +44,8 @@ public class ContactService {
             beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
             return beneficiaryRecord;
         }catch (Exception e){
-            throw new GenericException("", "", "");
+            log.error("error", e);
+            throw new GenericException("", e.getMessage(), "");
         }
 
     }

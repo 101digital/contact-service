@@ -41,7 +41,7 @@
             <column name="state" type="VARCHAR(100)">
             </column>
 
-            <column name="postcode" type="VARCHAR(20)">
+            <column name="post_code" type="VARCHAR(20)">
             </column>
 
             <column name="address" type="VARCHAR(250)">
