@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name;
+package io.marketplace.services.contact;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,15 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import io.marketplace.services.service_name.SpringTemplateServiceApplication;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@SpringBootTest(classes = SpringTemplateServiceApplication.class)
+@SpringBootTest(classes = ContactServiceApplication.class)
 @RunWith(SpringRunner.class)
-public class SpringTemplateServiceApplicationTests {
+public class ContactServiceApplicationTests {
 
     @Autowired
     private ApplicationContext applicationContext;

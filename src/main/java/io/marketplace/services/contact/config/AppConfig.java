@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name.config;
+package io.marketplace.services.contact.config;
 
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.hotspot.GarbageCollectorExports;

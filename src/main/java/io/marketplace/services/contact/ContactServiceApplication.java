@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name;
+package io.marketplace.services.contact;
 
 import java.util.TimeZone;
 
@@ -12,20 +12,21 @@ import io.marketplace.commons.logging.EventCategory;
 import io.marketplace.commons.logging.LogData;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-public class SpringTemplateServiceApplication {
+public class ContactServiceApplication {
 	
-	 private static final Logger log = LoggerFactory.getLogger(SpringTemplateServiceApplication.class);
+	 private static final Logger log = LoggerFactory.getLogger(ContactServiceApplication.class);
 
 	 @Value("${spring.application.name}")
 	 private static String applicationName;
 	 
     public static void main(String[] args) {
-        SpringApplication.run(SpringTemplateServiceApplication.class, args);
+        SpringApplication.run(ContactServiceApplication.class, args);
         log.trace(LogData.builder()
                 .category(EventCategory.APPLICATION)                
-                .title(applicationName + " succeesully started")                
+                .title(applicationName + " successfully started")
                 .build());
     }
 

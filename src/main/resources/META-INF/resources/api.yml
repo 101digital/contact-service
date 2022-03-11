@@ -1,23 +1,37 @@
 openapi: 3.0.1
 info:
-  title: service_name-service API
+  title: contact-service API
   version: 1.0.0
   description: |
-    Service description here.
-    Please add more...
+    Contact Service
 servers:
   - url: http://localhost:8074
     description: Generated server url
 tags:
-  - name: service_name-service
-    description: service_name-service
+  - name: contact-service
+    description: contact-service
 paths:
-  /sample-data:
+  /contacts:
     get:
       tags:
-        - service_name-service
-      summary: Retrive example data
-      operationId: getExampleData
+        - contact
+      summary: Get the list of contact by user identity
+      operationId: getContactList
+      parameters:
+        - name : userId
+          in : query
+          description: user id
+          required: false
+          schema:
+            type: string
+          example: 123
+        - name : searchText
+          in : query
+          description: search text
+          required: false
+          schema:
+            type: string
+          example: abc
       responses:
         503:
           description: Internal server error
@@ -30,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceDataResponse'
+                $ref: '#/components/schemas/BeneficiaryResponse'
         404:
           description: Data Not Found
           content:
@@ -50,10 +64,67 @@ paths:
               schema:
                 type: string
       security:
-        - Bearer: []
+        - Bearer: [ ]
+    post:
+      tags:
+        - contact
+      summary: Create a new contact for given user identity
+      operationId: createContact
+      requestBody:
+        description: Contact data model
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryRecord'
+      responses:
+          503:
+            description: Internal server error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+          200:
+            description: Retrieve data succesfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/BeneficiaryRecord'
+          404:
+            description: Data Not Found
+            content:
+              application/json:
+                schema:
+                  type: string
+          400:
+            description: Input data is invalid
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+          401:
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: string
+      security:
+        - Bearer: [ ]
+
 #-----
 components:
   schemas:
+    BeneficiaryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryRecord'
+        pagging:
+          $ref: '#/components/schemas/PagingInformation'
+        status:
+          $ref: '#/components/schemas/ResponseStatus'
     ServiceDataResponse:
       type: object
       properties:
@@ -87,6 +158,41 @@ components:
         code:
           type: string
         message:
+          type: string
+    BeneficiaryRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        serviceCode:
+          type: string
+        subServiceCode:
+          type: string
+        displayName:
+          type: string
+        paymentReference:
+          type: string
+        mobileNumber:
+          type: string
+        accountNumber:
+          type: string
+        branchCode:
+          type: string
+        bankCode:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postCode:
+          type: string
+        address:
+          type: string
+        verificationStatus:
+          type: string
+        verificationAt:
           type: string
   securitySchemes:
     Bearer:

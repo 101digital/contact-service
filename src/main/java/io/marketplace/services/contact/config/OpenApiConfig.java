@@ -1,4 +1,4 @@
-package io.marketplace.services.service_name.config;
+package io.marketplace.services.contact.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
