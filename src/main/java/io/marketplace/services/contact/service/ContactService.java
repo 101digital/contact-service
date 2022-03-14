@@ -43,7 +43,20 @@ public class ContactService {
 
         for (BeneficiaryEntity e:beneficiaryEntities) {
             beneficiaryRecords.add(BeneficiaryRecord.builder()
-                    .accountNumber(e.getAccountNumber())
+                    .accountNumber(e.getAccountNumber() != null ? e.getAccountNumber() : "")
+                    .address(e.getAddress() != null ? e.getAddress() : "")
+                    .bankCode(e.getBankCode() != null ? e.getBankCode() : "")
+                    .branchCode(e.getBranchCode() != null ? e.getBranchCode() : "")
+                    .city(e.getCity() != null ? e.getCity() : "")
+                    .serviceCode(e.getServiceCode() != null ? e.getServiceCode() : "")
+                    .subServiceCode(e.getSubServiceCode() != null ? e.getSubServiceCode() : "")
+                    .postCode(e.getPostCode() != null ? e.getPostCode() : "")
+                    .userId(e.getUserId() != null ? e.getUserId() : "")
+                    .displayName(e.getDisplayName() != null ? e.getDisplayName() : "")
+                    .mobileNumber(e.getMobileNumber() != null ? e.getMobileNumber() : "")
+                    .paymentReference(e.getPaymentReference() != null ? e.getPaymentReference() : "")
+                    .verificationAt(e.getVerificationAt() != null ? e.getVerificationAt().toString() : "")
+                    .verificationStatus(e.getVerificationStatus() != null ? e.getVerificationStatus() : "")
                     .build());
         }
 
