@@ -1,6 +1,7 @@
 package io.marketplace.services.contact.api.delegate;
 
 import io.marketplace.services.contact.api.ContactsApiDelegate;
+import io.marketplace.services.contact.model.BeneficiaryCreateResponse;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.BeneficiaryResponse;
 import io.marketplace.services.contact.service.ContactService;
@@ -46,8 +47,11 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
             businessIdIndex = {0}
     )
     @Override
-    public ResponseEntity<BeneficiaryRecord> createContact(BeneficiaryRecord beneficiaryRecord) {
+    public ResponseEntity<BeneficiaryCreateResponse> createContact(BeneficiaryRecord beneficiaryRecord) {
 
-        return ResponseEntity.ok(contactService.createBeneficiary(beneficiaryRecord));
+        return ResponseEntity.ok(BeneficiaryCreateResponse
+                .builder()
+                .data(contactService.createBeneficiary(beneficiaryRecord))
+                .build());
     }
 }

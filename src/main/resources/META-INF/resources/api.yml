@@ -84,12 +84,12 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/ErrorResponse'
-          200:
-            description: Retrieve data succesfully
+          201:
+            description: Contact data model created succesfully
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/BeneficiaryRecord'
+                  $ref: '#/components/schemas/BeneficiaryCreateResponse'
           404:
             description: Data Not Found
             content:
@@ -114,6 +114,11 @@ paths:
 #-----
 components:
   schemas:
+    BeneficiaryCreateResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/BeneficiaryRecord'
     BeneficiaryResponse:
       type: object
       properties:
