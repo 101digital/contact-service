@@ -10,8 +10,10 @@ import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
+import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,7 +40,15 @@ public class ContactService {
 
     public List<BeneficiaryRecord> getContactList(String userId, String searchText){
 
-        List<BeneficiaryEntity> beneficiaryEntities = beneficiaryRepository.findAllByUserIdAndDisplayName(userId, searchText);
+        List<BeneficiaryEntity> beneficiaryEntities;
+
+        if(userId != null || searchText != null){
+            Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(userId, searchText);
+            beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
+        }else{
+            beneficiaryEntities = beneficiaryRepository.findAll();
+        }
+
         List<BeneficiaryRecord> beneficiaryRecords = new ArrayList<>();
 
         for (BeneficiaryEntity e:beneficiaryEntities) {
