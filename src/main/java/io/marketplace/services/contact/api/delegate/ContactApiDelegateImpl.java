@@ -28,7 +28,7 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
             eventCode = Constants.RECV_GET_REQUEST,
             eventTitle = Constants.RECEIVING_THE_REQUEST_TO_GET,
             businessIdName = {SEARCH_REQUEST_BUSINESS_DATA},
-            businessIdIndex = {0}
+            businessIdIndex = {0, 1}
     )
     @Override
     public ResponseEntity<BeneficiaryResponse> getContactList(String userId,
