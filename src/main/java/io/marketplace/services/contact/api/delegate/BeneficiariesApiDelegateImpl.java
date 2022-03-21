@@ -1,8 +1,8 @@
 package io.marketplace.services.contact.api.delegate;
 
-import org.openapitools.api.BeneficiariesApiDelegate;
-import org.openapitools.model.BeneficiaryAccount;
-import org.openapitools.model.BeneficiaryAccountResponse;
+import io.marketplace.services.contact.api.BeneficiariesApiDelegate;
+import io.marketplace.services.contact.model.BeneficiaryAccount;
+import io.marketplace.services.contact.model.BeneficiaryAccountResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
