@@ -347,6 +347,11 @@
 			<version>${jackson.databind.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-handler</artifactId>
 			<version>${netty.handler.version}</version>
