@@ -26,18 +26,20 @@ public class BeneficiarySpecification implements Specification<BeneficiaryEntity
 
         Predicate p = criteriaBuilder.disjunction();
 
-        if (userId != null) {
-            p.getExpressions()
-                    .add(criteriaBuilder.equal(root.get("userId"), userId));
-        }
-
         if (searchText != null) {
             p.getExpressions()
                     .add(criteriaBuilder.or
                                     (criteriaBuilder.equal(root.get("displayName"), searchText),
                                             criteriaBuilder.equal(root.get("mobileNumber"), searchText),
-                                            criteriaBuilder.equal(root.get("accountNumber"), searchText)
+                                            criteriaBuilder.equal(root.get("accountNumber"), searchText),
+                                            criteriaBuilder.equal(root.get("userId"), userId)
                                             ));
+        }else{
+            if (userId != null) {
+                p.getExpressions()
+                        .add(criteriaBuilder.equal(root.get("userId"), userId));
+            }
+
         }
         return p;
     }
