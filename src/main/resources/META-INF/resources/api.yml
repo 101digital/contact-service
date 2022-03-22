@@ -208,6 +208,61 @@ paths:
                 type: string
       security:
         - Bearer: [ ]
+  /beneficiaries:
+    get:
+      tags:
+        - Beneficiary Account
+      summary: Lookup beneficiary account
+      description: Lookup beneficiary account
+      operationId:  lookupBeneficiary
+      parameters:
+        - name: mobileNumber
+          in: query
+          description: Mobile Number
+          required: false
+          schema:
+            type: string
+          example: 65086508427
+        - name: accountNumber
+          in: query
+          description: Account Number
+          required: false
+          schema:
+            type: string
+          example: 120086508427
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryAccountResponse'
+        503:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Input data is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+        - Bearer: [ ]
 #-----
 components:
   schemas:
