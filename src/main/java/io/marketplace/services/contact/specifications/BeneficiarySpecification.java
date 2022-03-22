@@ -28,13 +28,13 @@ public class BeneficiarySpecification implements Specification<BeneficiaryEntity
 
         if (searchText != null) {
             p.getExpressions()
-                    .add(criteriaBuilder.or
-                                    (criteriaBuilder.equal(root.get("displayName"), searchText),
-                                            criteriaBuilder.equal(root.get("mobileNumber"), searchText),
-                                            criteriaBuilder.equal(root.get("accountNumber"), searchText),
-                                            criteriaBuilder.equal(root.get("userId"), userId)
-                                            ));
-        }else{
+                    .add(criteriaBuilder.and
+                            (criteriaBuilder.equal(root.get("displayName"), searchText),
+                                    criteriaBuilder.equal(root.get("mobileNumber"), searchText),
+                                    criteriaBuilder.equal(root.get("accountNumber"), searchText),
+                                    criteriaBuilder.equal(root.get("userId"), userId)
+                            ));
+        } else {
             if (userId != null) {
                 p.getExpressions()
                         .add(criteriaBuilder.equal(root.get("userId"), userId));
