@@ -15,4 +15,6 @@ public class Constants {
     public static final String SEARCH_REQUEST_BUSINESS_DATA = "userId: %s searchText: %s";
     public static final String SAVE_REQUEST_BUSINESS_DATA = "request: %s";
 
+    public static final String SUPER_ROLE = "SuperAdmin";
+
 }
