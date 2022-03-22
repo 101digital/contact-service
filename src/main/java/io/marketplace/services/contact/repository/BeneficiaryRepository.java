@@ -13,5 +13,4 @@ public interface BeneficiaryRepository extends JpaRepository<BeneficiaryEntity, 
 
      List<BeneficiaryEntity> findAllByUserIdAndDisplayName(String userId, String displayName);
      List<BeneficiaryEntity> findAllByUserId(String userId);
-
 }
