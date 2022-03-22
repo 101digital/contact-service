@@ -24,22 +24,20 @@ public class BeneficiarySpecification implements Specification<BeneficiaryEntity
     public Predicate toPredicate(Root<BeneficiaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
 
-        Predicate p = criteriaBuilder.disjunction();
-        Predicate p1 = criteriaBuilder.disjunction();
+        Predicate userFilter = criteriaBuilder.equal(root.get("userId"), userId);
 
-        if (userId != null) {
-            p1.getExpressions()
-                    .add(criteriaBuilder.equal(root.get("userId"), userId));
-        }
+        if(searchText != null){
+            Predicate displayNameFilter = criteriaBuilder.equal(root.get("displayName"), searchText);
+            Predicate mobileNumberFilter = criteriaBuilder.equal(root.get("mobileNumber"), searchText);
+            Predicate accountNumberFilter = criteriaBuilder.equal(root.get("accountNumber"), searchText);
 
-        if (searchText != null) {
-            p.getExpressions()
-                    .add(criteriaBuilder.or
-                            (criteriaBuilder.equal(root.get("displayName"), searchText),
-                                    criteriaBuilder.equal(root.get("mobileNumber"), searchText),
-                                    criteriaBuilder.equal(root.get("accountNumber"), searchText)
-                            ).in(p1));
+            Predicate searchTextPredicate
+                    = criteriaBuilder
+                    .or(displayNameFilter, mobileNumberFilter, accountNumberFilter);
+
+            return criteriaBuilder.and(userFilter, searchTextPredicate);
+        }else{
+            return criteriaBuilder.and(userFilter);
         }
-        return p;
     }
 }
