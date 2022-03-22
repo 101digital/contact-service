@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface BeneficiaryRepository extends JpaRepository<BeneficiaryEntity, UUID>, JpaSpecificationExecutor<BeneficiaryEntity> {
 
      List<BeneficiaryEntity> findAllByUserIdAndDisplayName(String userId, String displayName);
+     List<BeneficiaryEntity> findAllByUserId(String userId);
+
 }

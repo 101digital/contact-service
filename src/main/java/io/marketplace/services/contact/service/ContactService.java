@@ -6,11 +6,13 @@ import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.model.event.EventMessage;
+import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
+import io.marketplace.services.contact.utils.Constants;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -41,36 +43,35 @@ public class ContactService {
     public List<BeneficiaryRecord> getContactList(String userId, String searchText){
 
         List<BeneficiaryEntity> beneficiaryEntities;
-
-        if(userId != null || searchText != null){
-            Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(userId, searchText);
-            beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
-        }else{
-            beneficiaryEntities = beneficiaryRepository.findAll();
-        }
-
         List<BeneficiaryRecord> beneficiaryRecords = new ArrayList<>();
 
-        for (BeneficiaryEntity e:beneficiaryEntities) {
-            beneficiaryRecords.add(BeneficiaryRecord.builder()
-                    .accountNumber(e.getAccountNumber() != null ? e.getAccountNumber() : "")
-                    .address(e.getAddress() != null ? e.getAddress() : "")
-                    .bankCode(e.getBankCode() != null ? e.getBankCode() : "")
-                    .branchCode(e.getBranchCode() != null ? e.getBranchCode() : "")
-                    .city(e.getCity() != null ? e.getCity() : "")
-                    .serviceCode(e.getServiceCode() != null ? e.getServiceCode() : "")
-                    .subServiceCode(e.getSubServiceCode() != null ? e.getSubServiceCode() : "")
-                    .postCode(e.getPostCode() != null ? e.getPostCode() : "")
-                    .userId(e.getUserId() != null ? e.getUserId() : "")
-                    .displayName(e.getDisplayName() != null ? e.getDisplayName() : "")
-                    .mobileNumber(e.getMobileNumber() != null ? e.getMobileNumber() : "")
-                    .paymentReference(e.getPaymentReference() != null ? e.getPaymentReference() : "")
-                    .verificationAt(e.getVerificationAt() != null ? e.getVerificationAt().toString() : "")
-                    .verificationStatus(e.getVerificationStatus() != null ? e.getVerificationStatus() : "")
-                    .build());
-        }
+        boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 
-        return beneficiaryRecords;
+        if(isAdmin)  {
+            //for admin user return all the contacts
+            Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(userId, searchText);
+
+            if(userId != null || searchText != null){
+                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
+            }else{
+                beneficiaryEntities = beneficiaryRepository.findAll();
+            }
+
+            return loadRecords(beneficiaryEntities, beneficiaryRecords);
+
+        }else{
+            //normal user can only get contacts under logging user id
+            String loggedInUserId = MembershipUtils.getUserId();
+            Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(loggedInUserId, searchText);
+
+            if(searchText != null){
+                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
+            }else{
+                beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId);
+            }
+
+            return loadRecords(beneficiaryEntities, beneficiaryRecords);
+        }
     }
 
     public BeneficiaryRecord createBeneficiary(BeneficiaryRecord beneficiaryRecord){
@@ -93,5 +94,28 @@ public class ContactService {
             throw new GenericException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), "");
         }
 
+    }
+
+    List<BeneficiaryRecord> loadRecords(List<BeneficiaryEntity> beneficiaryEntities, List<BeneficiaryRecord> beneficiaryRecords){
+        for (BeneficiaryEntity beneficiaryEntity: beneficiaryEntities) {
+            beneficiaryRecords.add(BeneficiaryRecord.builder()
+                    .accountNumber(beneficiaryEntity.getAccountNumber() != null ? beneficiaryEntity.getAccountNumber() : "")
+                    .address(beneficiaryEntity.getAddress() != null ? beneficiaryEntity.getAddress() : "")
+                    .bankCode(beneficiaryEntity.getBankCode() != null ? beneficiaryEntity.getBankCode() : "")
+                    .branchCode(beneficiaryEntity.getBranchCode() != null ? beneficiaryEntity.getBranchCode() : "")
+                    .city(beneficiaryEntity.getCity() != null ? beneficiaryEntity.getCity() : "")
+                    .serviceCode(beneficiaryEntity.getServiceCode() != null ? beneficiaryEntity.getServiceCode() : "")
+                    .subServiceCode(beneficiaryEntity.getSubServiceCode() != null ? beneficiaryEntity.getSubServiceCode() : "")
+                    .postCode(beneficiaryEntity.getPostCode() != null ? beneficiaryEntity.getPostCode() : "")
+                    .userId(beneficiaryEntity.getUserId() != null ? beneficiaryEntity.getUserId() : "")
+                    .displayName(beneficiaryEntity.getDisplayName() != null ? beneficiaryEntity.getDisplayName() : "")
+                    .mobileNumber(beneficiaryEntity.getMobileNumber() != null ? beneficiaryEntity.getMobileNumber() : "")
+                    .paymentReference(beneficiaryEntity.getPaymentReference() != null ? beneficiaryEntity.getPaymentReference() : "")
+                    .verificationAt(beneficiaryEntity.getVerificationAt() != null ? beneficiaryEntity.getVerificationAt().toString() : "")
+                    .verificationStatus(beneficiaryEntity.getVerificationStatus() != null ? beneficiaryEntity.getVerificationStatus() : "")
+                    .build());
+        }
+
+        return beneficiaryRecords;
     }
 }
