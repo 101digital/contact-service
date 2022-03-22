@@ -217,7 +217,7 @@ paths:
       operationId:  lookupBeneficiary
       parameters:
         - name: mobileNumber
-          in: path
+          in: query
           description: Mobile Number
           required: false
           schema:
