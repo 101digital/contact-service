@@ -2,6 +2,7 @@ package io.marketplace.services.contact.service;
 
 
 import io.marketplace.commons.exception.GenericException;
+import io.marketplace.commons.exception.NotFoundException;
 import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
@@ -109,7 +110,7 @@ public class ContactService {
 
     public WalletDto getBeneficiaryInformation(String mobileNumber, String accountNumber){
 
-        log.info("getBeneficiaryInformation for mobileNumer : {} and accountNumber : {}", mobileNumber, accountNumber);
+        log.info("getBeneficiaryInformation for mobileNumber : {} and accountNumber : {}", mobileNumber, accountNumber);
 
         WalletListResponse walletListResponse = null;
 
@@ -132,7 +133,8 @@ public class ContactService {
         if(walletListResponse.getData() != null && walletListResponse.getData().get(0) != null){
             return walletListResponse.getData().get(0);
         }else{
-            return null;
+            throw new NotFoundException("",
+                    "wallet not found", mobileNumber != null ? mobileNumber : accountNumber);
         }
     }
 
