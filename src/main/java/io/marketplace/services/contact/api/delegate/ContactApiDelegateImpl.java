@@ -51,7 +51,7 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
 
         return ResponseEntity.ok(BeneficiaryCreateResponse
                 .builder()
-                .data(contactService.createBeneficiary(beneficiaryRecord))
+                .data(contactService.createContact(beneficiaryRecord))
                 .build());
     }
 }

@@ -7,9 +7,14 @@ import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.model.event.EventMessage;
 import io.marketplace.commons.utils.MembershipUtils;
+import io.marketplace.services.contact.adapters.MembershipAdapter;
+import io.marketplace.services.contact.adapters.WalletServiceAdapter;
+import io.marketplace.services.contact.adapters.dto.UserListResponse;
+import io.marketplace.services.contact.adapters.dto.WalletListResponse;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
+import io.marketplace.services.contact.model.WalletDto;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
@@ -39,6 +44,12 @@ public class ContactService {
 
     @Autowired
     private PXChangeServiceClient pxClient;
+
+    @Autowired
+    private MembershipAdapter membershipAdapter;
+
+    @Autowired
+    private WalletServiceAdapter walletServiceAdapter;
 
     public List<BeneficiaryRecord> getContactList(String userId, String searchText){
 
@@ -74,7 +85,7 @@ public class ContactService {
         }
     }
 
-    public BeneficiaryRecord createBeneficiary(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryRecord createContact(BeneficiaryRecord beneficiaryRecord){
 
         try{
             beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
@@ -94,6 +105,32 @@ public class ContactService {
             throw new GenericException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), "");
         }
 
+    }
+
+    public WalletDto getBeneficiaryInformation(String mobileNumber, String accountNumber){
+
+        WalletListResponse walletListResponse = null;
+
+        if(!mobileNumber.isEmpty()){
+            //get beneficiary details by mobile number
+            UserListResponse userListResponse = membershipAdapter.getUserInformation(mobileNumber);
+
+            if(!userListResponse.getData().isEmpty()){
+                //get the first userid and calling the wallet api
+                walletListResponse = walletServiceAdapter.getWalletInformation(userListResponse.getData().get(0).getUserId());
+            }
+        }
+
+        if(!accountNumber.isEmpty()){
+            //get beneficiary details by account
+            walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
+        }
+
+        if(walletListResponse.getData() != null && walletListResponse.getData().get(0) != null){
+            return walletListResponse.getData().get(0);
+        }else{
+            return null;
+        }
     }
 
     List<BeneficiaryRecord> loadRecords(List<BeneficiaryEntity> beneficiaryEntities, List<BeneficiaryRecord> beneficiaryRecords){

@@ -236,7 +236,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BeneficiaryAccountResponse'
+                $ref: '#/components/schemas/WalletResponse'
         503:
           description: Internal server error
           content:
@@ -321,6 +321,11 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/BeneficiaryAccount'
+    WalletResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WalletDto'
     BeneficiaryAccount:
       type: object
       properties:
@@ -368,6 +373,92 @@ components:
           type: string
         verificationAt:
           type: string
+    BankAccoutDto:
+      type: object
+      required:
+        - accountHolderName
+        - accountId
+        - accountNumber
+        - accountSubType
+        - accountType
+        - balanceType
+        - bankBranchId
+        - bankBranchName
+        - bankCode
+        - bankLogo
+        - bankName
+        - consentId
+        - countryCode
+        - creditDebitIndicator
+        - currencyCode
+        - internalProductCategory
+        - productId
+    WalletDto:
+      type: object
+      properties:
+        walletId:
+          type: string
+          example: 11889-99982-10056-51950
+          description: Wallet ID of the specific wallet
+        userId:
+          type: string
+          example: '2222056798197'
+          description: Id of the owner of the wallet(member Id)
+        walletName:
+          type: string
+          example: my wallet 003
+          description: Name of the wallet
+        currentBalance:
+          type: number
+          example: 200.23
+          description: Current balance of the wallet. Meaningful only when wallet is a type of virtual wallet
+        availableBalance:
+          type: number
+          example: 100.23
+          description: Available balance of the wallet. Meaningful only when wallet is a type of virtual wallet
+        minimumBalance:
+          type: number
+          example: 10.23
+          description: Minimum balance that this wallet should hold. Meaningful only when wallet is a type of virtual wallet
+        bankAccount:
+          example: '10.23'
+          description: Minimum balance that this wallet should hold. Meaningful only when wallet is a type of virtual wallet
+          $ref: '#/components/schemas/BankAccoutDto'
+        currencyCode:
+          type: string
+          example: GBP
+          description: Currency code(in ISO 4217 alphabetic code standards) of the wallet. Meaningful only when wallet is a type of virtual wallet
+        status:
+          type: string
+          example: ACTIVE
+          description: Status of the wallet
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - BLOCKED
+            - EXPIRED
+            - TXN_SYNCING
+        type:
+          type: string
+          example: BANK_WALLET
+          description: Type of the wallet
+          enum:
+            - BANK_WALLET
+            - VIRTUAL_WALLET
+        isDefaultWallet:
+          type: boolean
+          example: true
+          description: Flag for indicating the default wallet among all the other wallets of a specific member
+        balanceAsAtDateTime:
+          type: string
+          format: date-time
+          example: '2019-12-16T03:37:17Z'
+          description: Indicate the last checked time of the balance
+        expiredAt:
+          type: string
+          format: date-time
+          example: '2019-12-16T03:37:17Z'
+          description: Wallet expiring date(in ISO 8061 format)in UTC
   securitySchemes:
     Bearer:
       type: http
