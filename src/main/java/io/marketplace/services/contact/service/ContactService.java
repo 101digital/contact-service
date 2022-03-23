@@ -123,9 +123,7 @@ public class ContactService {
                 walletListResponse = walletServiceAdapter.getWalletInformation(userListResponse.getData().get(0).getUserId());
                 log.info("userId for the wallet api : {}", userListResponse.getData().get(0).getUserId());
             }
-        }
-
-        if(walletListResponse.getData().isEmpty() && accountNumber != null && !accountNumber.isEmpty()){
+        }else if(accountNumber != null && !accountNumber.isEmpty()){
             //get beneficiary details by account
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
         }
