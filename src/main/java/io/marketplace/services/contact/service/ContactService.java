@@ -111,7 +111,7 @@ public class ContactService {
 
         WalletListResponse walletListResponse = null;
 
-        if(!mobileNumber.isEmpty()){
+        if(mobileNumber != null && !mobileNumber.isEmpty()){
             //get beneficiary details by mobile number
             UserListResponse userListResponse = membershipAdapter.getUserInformation(mobileNumber);
 
@@ -121,7 +121,7 @@ public class ContactService {
             }
         }
 
-        if(!accountNumber.isEmpty()){
+        if(accountNumber != null && !accountNumber.isEmpty()){
             //get beneficiary details by account
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
         }
