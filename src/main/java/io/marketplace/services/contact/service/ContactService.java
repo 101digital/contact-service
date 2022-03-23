@@ -109,6 +109,8 @@ public class ContactService {
 
     public WalletDto getBeneficiaryInformation(String mobileNumber, String accountNumber){
 
+        log.info("getBeneficiaryInformation for mobileNumer : {} and accountNumber : {}", mobileNumber, accountNumber);
+
         WalletListResponse walletListResponse = null;
 
         if(mobileNumber != null && !mobileNumber.isEmpty()){
@@ -118,10 +120,11 @@ public class ContactService {
             if(!userListResponse.getData().isEmpty()){
                 //get the first userid and calling the wallet api
                 walletListResponse = walletServiceAdapter.getWalletInformation(userListResponse.getData().get(0).getUserId());
+                log.info("userId for the wallet api : {}", userListResponse.getData().get(0).getUserId());
             }
         }
 
-        if(accountNumber != null && !accountNumber.isEmpty()){
+        if(walletListResponse.getData().isEmpty() && accountNumber != null && !accountNumber.isEmpty()){
             //get beneficiary details by account
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
         }
