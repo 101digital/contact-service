@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.UUID;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -44,7 +42,8 @@ public class RestUtils {
 
 
     private String getJWTToken() {
-        return jwtFactory.generateUserToken(membershipAdminUser, Collections.singletonList(Constants.SUPER_ROLE));
+        return jwtFactory.generateUserToken(membershipAdminUser,
+                Collections.singletonList(Constants.SUPER_ROLE));
     }
 
 

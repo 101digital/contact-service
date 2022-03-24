@@ -133,7 +133,7 @@ public class ContactService {
             return walletListResponse.getData().get(0);
         }else{
             throw new NotFoundException("",
-                    "wallet not found", mobileNumber != null ? mobileNumber : accountNumber);
+                    "Wallet not found for the business id : ", mobileNumber != null ? mobileNumber : accountNumber);
         }
     }
 
