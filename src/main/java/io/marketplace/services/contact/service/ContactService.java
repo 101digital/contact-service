@@ -121,14 +121,15 @@ public class ContactService {
             if(!userListResponse.getData().isEmpty()){
                 //get the first userid and calling the wallet api
                 walletListResponse = walletServiceAdapter.getWalletInformation(userListResponse.getData().get(0).getUserId());
-                log.info("userId for the wallet api : {}", userListResponse.getData().get(0).getUserId());
+                log.info("wallet api response for userId : {} response: {}", userListResponse.getData().get(0).getUserId(), walletListResponse);
             }
         }else if(accountNumber != null && !accountNumber.isEmpty()){
             //get beneficiary details by account
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
+            log.info("wallet api response for accountNumber : {} response: {}", accountNumber, walletListResponse);
         }
 
-        if(walletListResponse != null && walletListResponse.getData() != null && walletListResponse.getData().get(0) != null){
+        if(walletListResponse != null && walletListResponse.getData() != null && !walletListResponse.getData().isEmpty()){
             return walletListResponse.getData().get(0);
         }else{
             throw new NotFoundException("",
