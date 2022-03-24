@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
@@ -81,7 +82,7 @@ public class WalletServiceAdapter {
                 return response.getBody();
             }
 
-        } catch (UnauthorizedException ex){
+        } catch (HttpClientErrorException ex){
             throw new UnauthorizedException(WALLET_SEARCH_VIA_USER_ERROR_CODE,
                     ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, userId);
         } catch (Exception e){
@@ -119,7 +120,7 @@ public class WalletServiceAdapter {
 
                 return response.getBody();
             }
-        } catch (UnauthorizedException ex){
+        } catch (HttpClientErrorException ex){
             throw new UnauthorizedException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE,
                 ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, accountNumber);
         } catch (Exception ex){
