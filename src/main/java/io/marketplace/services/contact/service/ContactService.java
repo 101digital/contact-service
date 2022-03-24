@@ -128,7 +128,7 @@ public class ContactService {
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
         }
 
-        if(walletListResponse.getData() != null && walletListResponse.getData().get(0) != null){
+        if(walletListResponse != null && walletListResponse.getData() != null && walletListResponse.getData().get(0) != null){
             return walletListResponse.getData().get(0);
         }else{
             throw new NotFoundException("",
