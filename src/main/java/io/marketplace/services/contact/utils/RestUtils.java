@@ -3,6 +3,9 @@ package io.marketplace.services.contact.utils;
 import io.marketplace.commons.jwt.JWTFactory;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -10,23 +13,25 @@ import org.springframework.stereotype.Component;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Component
 public class RestUtils {
+
+    @Value("${jwt.default-membership-id:}")
+    private String membershipAdminUser;
+
     private static final Logger LOG = LoggerFactory.getLogger(RestUtils.class);
 
     private static final String CONTENT_TYPE_HEADER_NAME = "Content-Type";
     private static final String AUTHORIZATION_HEADER_NAME = "X-JWT-Assertion";
 
-    private final JWTFactory jwtFactory;
-
-    public RestUtils(JWTFactory jwtFactory) {
-        this.jwtFactory = jwtFactory;
-    }
-
+    @Autowired
+    @Qualifier("internal-jwt-factory")
+    private JWTFactory jwtFactory;
 
     public <T> HttpEntity<T> getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
@@ -39,7 +44,7 @@ public class RestUtils {
 
 
     private String getJWTToken() {
-        return jwtFactory.generateUserToken(UUID.randomUUID().toString(), Arrays.asList(Constants.SUPER_ROLE));
+        return jwtFactory.generateUserToken(membershipAdminUser, Collections.singletonList(Constants.SUPER_ROLE));
     }
 
 
