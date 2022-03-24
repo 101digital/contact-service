@@ -39,7 +39,7 @@ public class RestUtils {
 
 
     private String getJWTToken() {
-        return jwtFactory.generateUserTokenWithPermission(UUID.randomUUID().toString(), Arrays.asList(Constants.SUPER_ROLE));
+        return jwtFactory.generateUserToken(UUID.randomUUID().toString(), Arrays.asList(Constants.SUPER_ROLE));
     }
 
 
