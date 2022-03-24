@@ -121,8 +121,8 @@ public class WalletServiceAdapter {
                 return response.getBody();
             }
         } catch (HttpClientErrorException ex){
-            throw new UnauthorizedException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE,
-                ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, accountNumber);
+            throw new UnauthorizedException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE,
+                WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE, accountNumber);
         } catch (Exception ex){
             LOG.error(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE + ex.getMessage(), Error.of(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE), ex);
             throw new ApiException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE, ex);
