@@ -2,6 +2,7 @@ package io.marketplace.services.contact.adapters;
 
 import com.google.gson.Gson;
 import io.marketplace.commons.exception.InternalServerErrorException;
+import io.marketplace.commons.exception.UnauthorizedException;
 import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
@@ -26,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 
 import static io.marketplace.services.contact.utils.ErrorCode.WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE;
+import static io.marketplace.services.contact.utils.ErrorCode.WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE;
 import static io.marketplace.services.contact.utils.ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_CODE;
 
 @Component
@@ -79,9 +81,12 @@ public class WalletServiceAdapter {
                 return response.getBody();
             }
 
-        } catch (Exception ex){
-            LOG.error(ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE + ex.getMessage(), Error.of(WALLET_SEARCH_VIA_USER_ERROR_CODE), ex);
-            throw new ApiException(ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, ex);
+        } catch (UnauthorizedException ex){
+            throw new UnauthorizedException(WALLET_SEARCH_VIA_USER_ERROR_CODE,
+                    ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, userId);
+        } catch (Exception e){
+            LOG.error(ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE + e.getMessage(), Error.of(WALLET_SEARCH_VIA_USER_ERROR_CODE), e);
+            throw new ApiException(ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, e);
         }
         return null;
     }
@@ -114,10 +119,12 @@ public class WalletServiceAdapter {
 
                 return response.getBody();
             }
-
+        } catch (UnauthorizedException ex){
+            throw new UnauthorizedException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE,
+                ErrorCode.WALLET_SEARCH_VIA_USER_ERROR_MESSAGE, accountNumber);
         } catch (Exception ex){
-            LOG.error(ErrorCode.WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE + ex.getMessage(), Error.of(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE), ex);
-            throw new ApiException(ErrorCode.WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE, ex);
+            LOG.error(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE + ex.getMessage(), Error.of(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE), ex);
+            throw new ApiException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE, ex);
         }
         return null;
     }
