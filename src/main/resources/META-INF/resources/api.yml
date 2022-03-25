@@ -347,8 +347,10 @@ components:
           type: string
         serviceCode:
           type: string
+          default: ""
         subServiceCode:
           type: string
+          default: ""
         displayName:
           type: string
           default: ""
@@ -357,8 +359,10 @@ components:
           default: ""
         mobileNumber:
           type: string
+          default: ""
         accountNumber:
           type: string
+          default: ""
         branchCode:
           type: string
           default: ""
@@ -370,6 +374,7 @@ components:
           default: ""
         state:
           type: string
+          default: ""
         postCode:
           type: string
           default: ""
@@ -378,8 +383,10 @@ components:
           default: ""
         verificationStatus:
           type: string
+          default: ""
         verificationAt:
           type: string
+          default: ""
     BankAccoutDto:
       type: object
       required:
