@@ -3,7 +3,7 @@ package io.marketplace.services.contact.api.delegate;
 import io.marketplace.services.contact.api.BeneficiariesApiDelegate;
 import io.marketplace.services.contact.model.BeneficiaryAccount;
 import io.marketplace.services.contact.model.BeneficiaryAccountResponse;
-import io.marketplace.services.contact.model.WalletDto;
+import io.marketplace.services.contact.model.BeneficiaryDto;
 import io.marketplace.services.contact.model.WalletResponse;
 import io.marketplace.services.contact.service.ContactService;
 import io.marketplace.services.contact.utils.Constants;
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
-import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA;
 import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY;
 
 @Service
@@ -71,13 +71,13 @@ public class BeneficiariesApiDelegateImpl implements BeneficiariesApiDelegate {
     )
     @Override
     public ResponseEntity<WalletResponse> lookupBeneficiary(String mobileNumber,
-                                                            String accountNumber) {
+                                                                 String accountNumber) {
 
-        WalletDto walletDto = contactService.getBeneficiaryInformation(mobileNumber, accountNumber);
+        List<BeneficiaryDto> beneficiaryDtoList = contactService.getBeneficiaryInformation(mobileNumber, accountNumber);
 
         return ResponseEntity.ok(WalletResponse
                 .builder()
-                .data(walletDto)
+                .data(beneficiaryDtoList)
                 .build());
     }
 }

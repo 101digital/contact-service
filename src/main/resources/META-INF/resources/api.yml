@@ -270,14 +270,14 @@ components:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/BeneficiaryRecord'
+          $ref: '#/components/schemas/BeneficiaryDto'
     BeneficiaryResponse:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/BeneficiaryRecord'
+            $ref: '#/components/schemas/BeneficiaryDto'
         pagging:
           $ref: '#/components/schemas/PagingInformation'
         status:
@@ -325,7 +325,13 @@ components:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/WalletDto'
+          type: array
+          items:
+            $ref: '#/components/schemas/BeneficiaryDto'
+        pagging:
+          $ref: '#/components/schemas/PagingInformation'
+        status:
+          $ref: '#/components/schemas/ResponseStatus'
     BeneficiaryAccount:
       type: object
       properties:
@@ -337,6 +343,23 @@ components:
           type: string
           readOnly: true
         displayName:
+          type: string
+    BeneficiaryDto:
+      type: object
+      properties:
+        userId:
+          type: string
+        serviceCode:
+          type: string
+        subServiceCode:
+          type: string
+        displayName:
+          type: string
+        paymentReference:
+          type: string
+        accountNumber:
+          type: string
+        bankCode:
           type: string
     BeneficiaryRecord:
       type: object
@@ -387,26 +410,17 @@ components:
         verificationAt:
           type: string
           default: ""
-    BankAccoutDto:
+    BankAccountDto:
       type: object
-      required:
-        - accountHolderName
-        - accountId
-        - accountNumber
-        - accountSubType
-        - accountType
-        - balanceType
-        - bankBranchId
-        - bankBranchName
-        - bankCode
-        - bankLogo
-        - bankName
-        - consentId
-        - countryCode
-        - creditDebitIndicator
-        - currencyCode
-        - internalProductCategory
-        - productId
+      properties:
+        bankCode:
+          type: string
+        accountNumber:
+          type: string
+        accountHolderName:
+          type: string
+        accountId:
+          type: string
     WalletDto:
       type: object
       properties:
@@ -437,7 +451,7 @@ components:
         bankAccount:
           example: '10.23'
           description: Minimum balance that this wallet should hold. Meaningful only when wallet is a type of virtual wallet
-          $ref: '#/components/schemas/BankAccoutDto'
+          $ref: '#/components/schemas/BankAccountDto'
         currencyCode:
           type: string
           example: GBP

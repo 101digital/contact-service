@@ -4,10 +4,14 @@ import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
+import io.marketplace.services.contact.model.BeneficiaryDto;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
+import io.marketplace.services.contact.model.WalletDto;
 import io.marketplace.services.contact.utils.Constants;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -46,5 +50,39 @@ public class BeneficiaryMapper {
                 .verificationStatus(beneficiaryRecord.getVerificationStatus() != null ? beneficiaryRecord.getVerificationStatus() : "")
                 .address(beneficiaryRecord.getAddress())
                 .build();
+    }
+
+    public List<BeneficiaryDto> transformFromWalletDtoToBeneficiaryType(List<WalletDto> walletDtos){
+
+        List<BeneficiaryDto> beneficiaryDtoList = new ArrayList<>();
+
+        for(WalletDto walletDto : walletDtos){
+
+            beneficiaryDtoList.add(BeneficiaryDto.builder()
+                    .accountNumber(walletDto.getBankAccount().getAccountNumber())
+                    .bankCode(walletDto.getBankAccount().getBankCode())
+                    .displayName(walletDto.getBankAccount().getAccountHolderName())
+                    .paymentReference(walletDto.getBankAccount().getAccountId())
+                    .serviceCode(Constants.SERVICE_CODE)
+                    .subServiceCode(Constants.SERVICE_CODE)
+                    .userId(walletDto.getUserId())
+                    .build());
+        }
+
+        return beneficiaryDtoList;
+    }
+
+    public BeneficiaryDto transformFromBeneficiaryRecordToBeneficiaryDto(BeneficiaryRecord beneficiaryRecord){
+
+        return BeneficiaryDto.builder()
+                .accountNumber(beneficiaryRecord.getAccountNumber())
+                .bankCode(beneficiaryRecord.getBankCode())
+                .displayName(beneficiaryRecord.getDisplayName())
+                .paymentReference(beneficiaryRecord.getPaymentReference())
+                .serviceCode(Constants.SERVICE_CODE)
+                .subServiceCode(Constants.SERVICE_CODE)
+                .userId(beneficiaryRecord.getUserId())
+                .build();
+
     }
 }

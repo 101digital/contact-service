@@ -2,6 +2,7 @@ package io.marketplace.services.contact.api.delegate;
 
 import io.marketplace.services.contact.api.ContactsApiDelegate;
 import io.marketplace.services.contact.model.BeneficiaryCreateResponse;
+import io.marketplace.services.contact.model.BeneficiaryDto;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.BeneficiaryResponse;
 import io.marketplace.services.contact.service.ContactService;
@@ -34,7 +35,7 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
     public ResponseEntity<BeneficiaryResponse> getContactList(String userId,
                                                               String searchText) {
 
-        List<BeneficiaryRecord> contactList = contactService.getContactList(userId, searchText);
+        List<BeneficiaryDto> contactList = contactService.getContactList(userId, searchText);
 
         return ResponseEntity.ok(BeneficiaryResponse.builder().data(contactList).build());
     }

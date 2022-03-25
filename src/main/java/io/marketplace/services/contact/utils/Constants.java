@@ -28,4 +28,5 @@ public class Constants {
 
     public static final String SUPER_ROLE = "SuperAdmin";
 
+    public static final String SERVICE_CODE = "UD";
 }

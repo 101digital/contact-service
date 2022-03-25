@@ -1,6 +1,7 @@
 package io.marketplace.services.contact.service;
 
 
+import com.google.gson.Gson;
 import io.marketplace.commons.exception.GenericException;
 import io.marketplace.commons.exception.NotFoundException;
 import io.marketplace.commons.logging.Error;
@@ -14,8 +15,8 @@ import io.marketplace.services.contact.adapters.dto.UserListResponse;
 import io.marketplace.services.contact.adapters.dto.WalletListResponse;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
+import io.marketplace.services.contact.model.BeneficiaryDto;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
-import io.marketplace.services.contact.model.WalletDto;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
@@ -54,10 +55,12 @@ public class ContactService {
     @Autowired
     private WalletServiceAdapter walletServiceAdapter;
 
-    public List<BeneficiaryRecord> getContactList(String userId, String searchText){
+    @Autowired
+    private Gson gson;
+
+    public List<BeneficiaryDto> getContactList(String userId, String searchText){
 
         List<BeneficiaryEntity> beneficiaryEntities;
-        List<BeneficiaryRecord> beneficiaryRecords = new ArrayList<>();
 
         boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 
@@ -71,7 +74,7 @@ public class ContactService {
                 beneficiaryEntities = beneficiaryRepository.findAll();
             }
 
-            return loadRecords(beneficiaryEntities, beneficiaryRecords);
+            return loadRecords(beneficiaryEntities);
 
         }else{
             //normal user can only get contacts under logging user id
@@ -84,11 +87,11 @@ public class ContactService {
                 beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId);
             }
 
-            return loadRecords(beneficiaryEntities, beneficiaryRecords);
+            return loadRecords(beneficiaryEntities);
         }
     }
 
-    public BeneficiaryRecord createContact(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryDto createContact(BeneficiaryRecord beneficiaryRecord){
 
         try{
             beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
@@ -102,7 +105,7 @@ public class ContactService {
                             beneficiaryRecord.getPaymentReference() : "N/A")
                     .build());
 
-            return beneficiaryRecord;
+            return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
         }catch (Exception e){
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
             throw new GenericException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), "");
@@ -110,7 +113,7 @@ public class ContactService {
 
     }
 
-    public WalletDto getBeneficiaryInformation(String mobileNumber, String accountNumber){
+    public List<BeneficiaryDto> getBeneficiaryInformation(String mobileNumber, String accountNumber){
 
         log.info("getBeneficiaryInformation for mobileNumber : {} and accountNumber : {}", mobileNumber, accountNumber);
         String businessId = String.format(SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY, mobileNumber, accountNumber);
@@ -133,34 +136,32 @@ public class ContactService {
         }
 
         if(walletListResponse != null && walletListResponse.getData() != null && !walletListResponse.getData().isEmpty()){
-            return walletListResponse.getData().get(0);
+            return beneficiaryMapper.transformFromWalletDtoToBeneficiaryType(walletListResponse.getData());
         }else{
             throw new NotFoundException(ErrorCode.WALLET_NOT_FOUND_ERROR_CODE,
                     "Wallet not found for the business id : " + businessId, businessId);
         }
     }
 
-    List<BeneficiaryRecord> loadRecords(List<BeneficiaryEntity> beneficiaryEntities, List<BeneficiaryRecord> beneficiaryRecords){
+    List<BeneficiaryDto> loadRecords(List<BeneficiaryEntity> beneficiaryEntities){
+
+        List<BeneficiaryDto> beneficiaryDtoList = new ArrayList<>();
+
         for (BeneficiaryEntity beneficiaryEntity: beneficiaryEntities) {
 
-            beneficiaryRecords.add(BeneficiaryRecord.builder()
+            beneficiaryDtoList.add(
+                    BeneficiaryDto.builder()
                     .accountNumber(beneficiaryEntity.getAccountNumber())
-                    .address(beneficiaryEntity.getAddress())
                     .bankCode(beneficiaryEntity.getBankCode())
-                    .branchCode(beneficiaryEntity.getBranchCode())
-                    .city(beneficiaryEntity.getCity())
                     .serviceCode(beneficiaryEntity.getServiceCode())
                     .subServiceCode(beneficiaryEntity.getSubServiceCode())
-                    .postCode(beneficiaryEntity.getPostCode())
                     .userId(beneficiaryEntity.getUserId())
                     .displayName(beneficiaryEntity.getDisplayName())
-                    .mobileNumber(beneficiaryEntity.getMobileNumber())
                     .paymentReference(beneficiaryEntity.getPaymentReference())
-                    .verificationAt(beneficiaryEntity.getVerificationAt() != null ? beneficiaryEntity.getVerificationAt().toString() : "")
-                    .verificationStatus(beneficiaryEntity.getVerificationStatus() != null ? beneficiaryEntity.getVerificationStatus() : "")
-                    .build());
+                    .build()
+            );
         }
 
-        return beneficiaryRecords;
+        return beneficiaryDtoList;
     }
 }
