@@ -19,6 +19,7 @@ import io.marketplace.services.contact.model.WalletDto;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
+import io.marketplace.services.contact.utils.ErrorCode;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -132,7 +133,7 @@ public class ContactService {
         if(walletListResponse != null && walletListResponse.getData() != null && !walletListResponse.getData().isEmpty()){
             return walletListResponse.getData().get(0);
         }else{
-            throw new NotFoundException("",
+            throw new NotFoundException(ErrorCode.WALLET_NOT_FOUND_ERROR_CODE,
                     "Wallet not found for the business id : ", mobileNumber != null ? mobileNumber : accountNumber);
         }
     }
