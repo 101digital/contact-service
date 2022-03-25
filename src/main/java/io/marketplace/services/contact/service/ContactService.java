@@ -30,6 +30,7 @@ import java.util.List;
 
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.RECV_SAVE_REQUEST;
+import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY;
 import static io.marketplace.services.contact.utils.Constants.SUCCESS_REQUEST_TO_SAVE_CONTACT;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_MESSAGE;
@@ -112,6 +113,7 @@ public class ContactService {
     public WalletDto getBeneficiaryInformation(String mobileNumber, String accountNumber){
 
         log.info("getBeneficiaryInformation for mobileNumber : {} and accountNumber : {}", mobileNumber, accountNumber);
+        String businessId = String.format(SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY, mobileNumber, accountNumber);
 
         WalletListResponse walletListResponse = null;
 
@@ -134,7 +136,7 @@ public class ContactService {
             return walletListResponse.getData().get(0);
         }else{
             throw new NotFoundException(ErrorCode.WALLET_NOT_FOUND_ERROR_CODE,
-                    "Wallet not found for the business id : ", mobileNumber != null ? mobileNumber : accountNumber);
+                    "Wallet not found for the business id : " + businessId, businessId);
         }
     }
 
