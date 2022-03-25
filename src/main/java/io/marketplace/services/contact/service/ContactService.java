@@ -140,19 +140,20 @@ public class ContactService {
 
     List<BeneficiaryRecord> loadRecords(List<BeneficiaryEntity> beneficiaryEntities, List<BeneficiaryRecord> beneficiaryRecords){
         for (BeneficiaryEntity beneficiaryEntity: beneficiaryEntities) {
+
             beneficiaryRecords.add(BeneficiaryRecord.builder()
                     .accountNumber(beneficiaryEntity.getAccountNumber() != null ? beneficiaryEntity.getAccountNumber() : "")
-                    .address(beneficiaryEntity.getAddress() != null ? beneficiaryEntity.getAddress() : "")
-                    .bankCode(beneficiaryEntity.getBankCode() != null ? beneficiaryEntity.getBankCode() : "")
-                    .branchCode(beneficiaryEntity.getBranchCode() != null ? beneficiaryEntity.getBranchCode() : "")
-                    .city(beneficiaryEntity.getCity() != null ? beneficiaryEntity.getCity() : "")
+                    .address(beneficiaryEntity.getAddress())
+                    .bankCode(beneficiaryEntity.getBankCode())
+                    .branchCode(beneficiaryEntity.getBranchCode())
+                    .city(beneficiaryEntity.getCity())
                     .serviceCode(beneficiaryEntity.getServiceCode() != null ? beneficiaryEntity.getServiceCode() : "")
                     .subServiceCode(beneficiaryEntity.getSubServiceCode() != null ? beneficiaryEntity.getSubServiceCode() : "")
                     .postCode(beneficiaryEntity.getPostCode() != null ? beneficiaryEntity.getPostCode() : "")
-                    .userId(beneficiaryEntity.getUserId() != null ? beneficiaryEntity.getUserId() : "")
-                    .displayName(beneficiaryEntity.getDisplayName() != null ? beneficiaryEntity.getDisplayName() : "")
+                    .userId(beneficiaryEntity.getUserId())
+                    .displayName(beneficiaryEntity.getDisplayName())
                     .mobileNumber(beneficiaryEntity.getMobileNumber() != null ? beneficiaryEntity.getMobileNumber() : "")
-                    .paymentReference(beneficiaryEntity.getPaymentReference() != null ? beneficiaryEntity.getPaymentReference() : "")
+                    .paymentReference(beneficiaryEntity.getPaymentReference())
                     .verificationAt(beneficiaryEntity.getVerificationAt() != null ? beneficiaryEntity.getVerificationAt().toString() : "")
                     .verificationStatus(beneficiaryEntity.getVerificationStatus() != null ? beneficiaryEntity.getVerificationStatus() : "")
                     .build());

@@ -351,24 +351,31 @@ components:
           type: string
         displayName:
           type: string
+          default: ""
         paymentReference:
           type: string
+          default: ""
         mobileNumber:
           type: string
         accountNumber:
           type: string
         branchCode:
           type: string
+          default: ""
         bankCode:
           type: string
+          default: ""
         city:
           type: string
+          default: ""
         state:
           type: string
         postCode:
           type: string
+          default: ""
         address:
           type: string
+          default: ""
         verificationStatus:
           type: string
         verificationAt:
