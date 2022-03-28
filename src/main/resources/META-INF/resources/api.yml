@@ -112,108 +112,12 @@ paths:
                   type: string
       security:
         - Bearer: [ ]
-  /beneficiaries/-/mobile-numbers/{mobileNumber}:
-    get:
-      tags:
-        -  Beneficiary Account
-      summary: Lookup beneficiary account by mobile number
-      description: Lookup beneficiary account by mobile number
-      operationId:  lookupBeneficiaryAccountWithMobile
-      parameters:
-        - name: mobileNumber
-          in: path
-          description: Mobile Number
-          required: true
-          schema:
-            type: string
-          example: 65086508427
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BeneficiaryAccountResponse'
-        503:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        404:
-          description: Data Not Found
-          content:
-            application/json:
-              schema:
-                type: string
-        400:
-          description: Input data is invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: string
-      security:
-        - Bearer: [ ]
-  /beneficiaries/-/account-numbers/{accountNumber}:
-    get:
-      tags:
-        - Beneficiary Account
-      summary: Lookup beneficiary account by account number
-      description: Lookup beneficiary account by account number
-      operationId:  lookupBeneficiaryAccount
-      parameters:
-        - name: accountNumber
-          in: path
-          description: Account Number
-          required: true
-          schema:
-            type: string
-          example: 120086508427
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BeneficiaryAccountResponse'
-        503:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        404:
-          description: Data Not Found
-          content:
-            application/json:
-              schema:
-                type: string
-        400:
-          description: Input data is invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: string
-      security:
-        - Bearer: [ ]
   /beneficiaries:
     get:
       tags:
         - Beneficiary Account
       summary: Lookup beneficiary account
-      description: Lookup beneficiary account
+      description: Lookup beneficiary account by mobile number and account number
       operationId:  lookupBeneficiary
       parameters:
         - name: mobileNumber
@@ -270,14 +174,14 @@ components:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/BeneficiaryDto'
+          $ref: '#/components/schemas/BeneficiaryData'
     BeneficiaryResponse:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/BeneficiaryDto'
+            $ref: '#/components/schemas/BeneficiaryData'
         pagging:
           $ref: '#/components/schemas/PagingInformation'
         status:
@@ -327,7 +231,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/BeneficiaryDto'
+            $ref: '#/components/schemas/BeneficiaryData'
         pagging:
           $ref: '#/components/schemas/PagingInformation'
         status:
@@ -344,7 +248,7 @@ components:
           readOnly: true
         displayName:
           type: string
-    BeneficiaryDto:
+    BeneficiaryData:
       type: object
       properties:
         userId:

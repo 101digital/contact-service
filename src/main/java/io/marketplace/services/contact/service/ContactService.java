@@ -15,7 +15,7 @@ import io.marketplace.services.contact.adapters.dto.UserListResponse;
 import io.marketplace.services.contact.adapters.dto.WalletListResponse;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
-import io.marketplace.services.contact.model.BeneficiaryDto;
+import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
@@ -58,7 +58,7 @@ public class ContactService {
     @Autowired
     private Gson gson;
 
-    public List<BeneficiaryDto> getContactList(String userId, String searchText){
+    public List<BeneficiaryData> getContactList(String userId, String searchText){
 
         List<BeneficiaryEntity> beneficiaryEntities;
 
@@ -91,7 +91,7 @@ public class ContactService {
         }
     }
 
-    public BeneficiaryDto createContact(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord){
 
         try{
             beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
@@ -113,7 +113,7 @@ public class ContactService {
 
     }
 
-    public List<BeneficiaryDto> getBeneficiaryInformation(String mobileNumber, String accountNumber){
+    public List<BeneficiaryData> getBeneficiaryInformation(String mobileNumber, String accountNumber){
 
         log.info("getBeneficiaryInformation for mobileNumber : {} and accountNumber : {}", mobileNumber, accountNumber);
         String businessId = String.format(SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY, mobileNumber, accountNumber);
@@ -143,14 +143,14 @@ public class ContactService {
         }
     }
 
-    List<BeneficiaryDto> loadRecords(List<BeneficiaryEntity> beneficiaryEntities){
+    List<BeneficiaryData> loadRecords(List<BeneficiaryEntity> beneficiaryEntities){
 
-        List<BeneficiaryDto> beneficiaryDtoList = new ArrayList<>();
+        List<BeneficiaryData> beneficiaryDtoList = new ArrayList<>();
 
         for (BeneficiaryEntity beneficiaryEntity: beneficiaryEntities) {
 
             beneficiaryDtoList.add(
-                    BeneficiaryDto.builder()
+                    BeneficiaryData.builder()
                     .accountNumber(beneficiaryEntity.getAccountNumber())
                     .bankCode(beneficiaryEntity.getBankCode())
                     .serviceCode(beneficiaryEntity.getServiceCode())

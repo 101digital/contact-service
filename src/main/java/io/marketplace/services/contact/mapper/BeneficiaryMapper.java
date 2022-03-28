@@ -4,7 +4,7 @@ import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
-import io.marketplace.services.contact.model.BeneficiaryDto;
+import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.WalletDto;
 import io.marketplace.services.contact.utils.Constants;
@@ -52,13 +52,13 @@ public class BeneficiaryMapper {
                 .build();
     }
 
-    public List<BeneficiaryDto> transformFromWalletDtoToBeneficiaryType(List<WalletDto> walletDtos){
+    public List<BeneficiaryData> transformFromWalletDtoToBeneficiaryType(List<WalletDto> walletDtos){
 
-        List<BeneficiaryDto> beneficiaryDtoList = new ArrayList<>();
+        List<BeneficiaryData> beneficiaryDtoList = new ArrayList<>();
 
         for(WalletDto walletDto : walletDtos){
 
-            beneficiaryDtoList.add(BeneficiaryDto.builder()
+            beneficiaryDtoList.add(BeneficiaryData.builder()
                     .accountNumber(walletDto.getBankAccount().getAccountNumber())
                     .bankCode(walletDto.getBankAccount().getBankCode())
                     .displayName(walletDto.getBankAccount().getAccountHolderName())
@@ -72,9 +72,9 @@ public class BeneficiaryMapper {
         return beneficiaryDtoList;
     }
 
-    public BeneficiaryDto transformFromBeneficiaryRecordToBeneficiaryDto(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryData transformFromBeneficiaryRecordToBeneficiaryDto(BeneficiaryRecord beneficiaryRecord){
 
-        return BeneficiaryDto.builder()
+        return BeneficiaryData.builder()
                 .accountNumber(beneficiaryRecord.getAccountNumber())
                 .bankCode(beneficiaryRecord.getBankCode())
                 .displayName(beneficiaryRecord.getDisplayName())
