@@ -6,7 +6,7 @@ import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
-import io.marketplace.services.contact.model.WalletDto;
+import io.marketplace.services.contact.model.Wallet;
 import io.marketplace.services.contact.utils.Constants;
 import org.springframework.stereotype.Component;
 
@@ -52,20 +52,20 @@ public class BeneficiaryMapper {
                 .build();
     }
 
-    public List<BeneficiaryData> transformFromWalletDtoToBeneficiaryType(List<WalletDto> walletDtos){
+    public List<BeneficiaryData> transformFromWalletDtoToBeneficiaryType(List<Wallet> walletDtos){
 
         List<BeneficiaryData> beneficiaryDtoList = new ArrayList<>();
 
-        for(WalletDto walletDto : walletDtos){
+        for(Wallet walletObject : walletDtos){
 
             beneficiaryDtoList.add(BeneficiaryData.builder()
-                    .accountNumber(walletDto.getBankAccount().getAccountNumber())
-                    .bankCode(walletDto.getBankAccount().getBankCode())
-                    .displayName(walletDto.getBankAccount().getAccountHolderName())
-                    .paymentReference(walletDto.getBankAccount().getAccountId())
+                    .accountNumber(walletObject.getBankAccount().getAccountNumber())
+                    .bankCode(walletObject.getBankAccount().getBankCode())
+                    .displayName(walletObject.getBankAccount().getAccountHolderName())
+                    .paymentReference(walletObject.getBankAccount().getAccountId())
                     .serviceCode(Constants.SERVICE_CODE)
                     .subServiceCode(Constants.SERVICE_CODE)
-                    .userId(walletDto.getUserId())
+                    .userId(walletObject.getUserId())
                     .build());
         }
 

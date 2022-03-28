@@ -314,7 +314,7 @@ components:
         verificationAt:
           type: string
           default: ""
-    BankAccountDto:
+    BankAccount:
       type: object
       properties:
         bankCode:
@@ -325,7 +325,7 @@ components:
           type: string
         accountId:
           type: string
-    WalletDto:
+    Wallet:
       type: object
       properties:
         walletId:
@@ -355,7 +355,7 @@ components:
         bankAccount:
           example: '10.23'
           description: Minimum balance that this wallet should hold. Meaningful only when wallet is a type of virtual wallet
-          $ref: '#/components/schemas/BankAccountDto'
+          $ref: '#/components/schemas/BankAccount'
         currencyCode:
           type: string
           example: GBP
