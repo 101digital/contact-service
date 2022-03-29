@@ -251,19 +251,11 @@ components:
     BeneficiaryData:
       type: object
       properties:
-        userId:
-          type: string
-        serviceCode:
-          type: string
-        subServiceCode:
-          type: string
         displayName:
           type: string
         paymentReference:
           type: string
         accountNumber:
-          type: string
-        bankCode:
           type: string
     BeneficiaryRecord:
       type: object

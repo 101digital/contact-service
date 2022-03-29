@@ -16,4 +16,6 @@ public final class ErrorCode {
     public static final String WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE = "092.01.500.05";
     public static final String WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE = "Error occurred when getting wallet information using account number";
 
+    public static final String KAFKA_CONSUMER_ERROR_MESSAGE = "Error to process kafka message for the topic :";
+    public static final String KAFKA_CONSUMER_ERROR_CODE = "092.01.500.88";
 }

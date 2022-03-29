@@ -60,12 +60,8 @@ public class BeneficiaryMapper {
 
             beneficiaryDtoList.add(BeneficiaryData.builder()
                     .accountNumber(walletObject.getBankAccount().getAccountNumber())
-                    .bankCode(walletObject.getBankAccount().getBankCode())
                     .displayName(walletObject.getBankAccount().getAccountHolderName())
                     .paymentReference(walletObject.getBankAccount().getAccountId())
-                    .serviceCode(Constants.SERVICE_CODE)
-                    .subServiceCode(Constants.SERVICE_CODE)
-                    .userId(walletObject.getUserId())
                     .build());
         }
 
@@ -76,12 +72,8 @@ public class BeneficiaryMapper {
 
         return BeneficiaryData.builder()
                 .accountNumber(beneficiaryRecord.getAccountNumber())
-                .bankCode(beneficiaryRecord.getBankCode())
                 .displayName(beneficiaryRecord.getDisplayName())
                 .paymentReference(beneficiaryRecord.getPaymentReference())
-                .serviceCode(Constants.SERVICE_CODE)
-                .subServiceCode(Constants.SERVICE_CODE)
-                .userId(beneficiaryRecord.getUserId())
                 .build();
 
     }

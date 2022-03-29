@@ -152,10 +152,6 @@ public class ContactService {
             beneficiaryDtoList.add(
                     BeneficiaryData.builder()
                     .accountNumber(beneficiaryEntity.getAccountNumber())
-                    .bankCode(beneficiaryEntity.getBankCode())
-                    .serviceCode(beneficiaryEntity.getServiceCode())
-                    .subServiceCode(beneficiaryEntity.getSubServiceCode())
-                    .userId(beneficiaryEntity.getUserId())
                     .displayName(beneficiaryEntity.getDisplayName())
                     .paymentReference(beneficiaryEntity.getPaymentReference())
                     .build()
