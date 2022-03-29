@@ -7,7 +7,7 @@ info:
 servers:
   - url: http://localhost:8074
     description: Generated server url
-tags:[]
+tags: []
 paths:
   /contacts:
     get:
