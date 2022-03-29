@@ -65,7 +65,7 @@ paths:
         - Bearer: [ ]
     post:
       tags:
-        - contact
+        - Contact
       summary: Create a new contact for given user identity
       operationId: createContact
       requestBody:
