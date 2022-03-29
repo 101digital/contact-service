@@ -7,16 +7,12 @@ info:
 servers:
   - url: http://localhost:8074
     description: Generated server url
-tags:
-  - name: contact-service
-    description: contact-service
-  - name: Beneficiary Account
-    description: Beneficiary Account
+tags:[]
 paths:
   /contacts:
     get:
       tags:
-        - contact
+        - Contact
       summary: Get the list of contact by user identity
       operationId: getContactList
       parameters:
@@ -115,7 +111,7 @@ paths:
   /beneficiaries:
     get:
       tags:
-        - Beneficiary Account
+        - Beneficiary
       summary: Lookup beneficiary account
       description: Lookup beneficiary account by mobile number and account number
       operationId:  lookupBeneficiary
