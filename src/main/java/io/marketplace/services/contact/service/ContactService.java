@@ -81,7 +81,7 @@ public class ContactService {
             String loggedInUserId = MembershipUtils.getUserId();
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(loggedInUserId, searchText);
 
-            if(searchText != null){
+            if(searchText != null || userId != null){
                 beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
             }else{
                 beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId);
