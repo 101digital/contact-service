@@ -13,9 +13,6 @@ public class ProcessEventService {
     private static final Logger LOG = LoggerFactory.getLogger(ProcessEventService.class);
 
     @Autowired
-    private Gson gsonInstance;
-
-    @Autowired
     private ContactService contactService;
 
     public void process(BeneficiaryRecord beneficiaryRecord) {
