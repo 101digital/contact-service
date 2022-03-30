@@ -61,6 +61,7 @@ public class ContactService {
     public List<BeneficiaryData> getContactList(String userId, String searchText){
 
         List<BeneficiaryEntity> beneficiaryEntities;
+        List<BeneficiaryEntity> beneficiaryEntitiesForUserSearch = null;
 
         boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 
@@ -81,10 +82,20 @@ public class ContactService {
             String loggedInUserId = MembershipUtils.getUserId();
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(loggedInUserId, searchText);
 
-            if(searchText != null || userId != null){
+            if(searchText != null){
                 beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
             }else{
                 beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId);
+
+                if(userId != null){
+                    beneficiaryEntities.forEach(e -> {
+                        if(userId.equals(e.getUserId())){
+                            beneficiaryEntitiesForUserSearch.add(e);
+                        }
+                    });
+                    return loadRecords(beneficiaryEntitiesForUserSearch);
+                }
+
             }
 
             return loadRecords(beneficiaryEntities);
