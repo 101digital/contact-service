@@ -61,7 +61,7 @@ public class ContactService {
     public List<BeneficiaryData> getContactList(String userId, String searchText){
 
         List<BeneficiaryEntity> beneficiaryEntities;
-        List<BeneficiaryEntity> beneficiaryEntitiesForUserSearch = null;
+        List<BeneficiaryEntity> beneficiaryEntitiesForUserSearch = new ArrayList<>();
 
         boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 

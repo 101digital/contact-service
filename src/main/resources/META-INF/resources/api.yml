@@ -178,10 +178,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeneficiaryData'
-        pagging:
-          $ref: '#/components/schemas/PagingInformation'
-        status:
-          $ref: '#/components/schemas/ResponseStatus'
     ServiceDataResponse:
       type: object
       properties:
