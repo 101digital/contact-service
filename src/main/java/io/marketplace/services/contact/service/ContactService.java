@@ -1,7 +1,5 @@
 package io.marketplace.services.contact.service;
 
-
-import com.google.gson.Gson;
 import io.marketplace.commons.exception.GenericException;
 import io.marketplace.commons.exception.NotFoundException;
 import io.marketplace.commons.logging.Error;
@@ -17,18 +15,29 @@ import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
 import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
+import io.marketplace.services.contact.model.BeneficiaryResponse;
+import io.marketplace.services.contact.model.PagingInformation;
 import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
 import io.marketplace.services.contact.utils.ErrorCode;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.marketplace.services.contact.utils.Constants.ACCOUNT_COLUMN;
+import static io.marketplace.services.contact.utils.Constants.CREATED_AT_COLUMN;
+import static io.marketplace.services.contact.utils.Constants.DISPLAY_NAME;
+import static io.marketplace.services.contact.utils.Constants.PAYMENT_REFERENCE;
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.RECV_SAVE_REQUEST;
 import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY;
@@ -55,40 +64,86 @@ public class ContactService {
     @Autowired
     private WalletServiceAdapter walletServiceAdapter;
 
-    @Autowired
-    private Gson gson;
 
-    public List<BeneficiaryData> getContactList(String userId, String searchText){
+    public BeneficiaryResponse getContactList(String userId, String searchText, Integer pageSizeValue, Integer pageNumber, List<String> listOrders){
 
-        List<BeneficiaryEntity> beneficiaryEntities;
+        Page<BeneficiaryEntity> beneficiaryEntities;
 
         boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
+
+        Integer pageNum = pageNumber != null && pageNumber > 0 ? pageNumber
+                : Constants.DEFAULT_PAGE_NUMBER;
+        Integer pageSize = pageSizeValue != null && pageSizeValue > 0 ? pageSizeValue
+                : Constants.DEFAULT_PAGE_SIZE;
+
+        // build order
+        Sort.Direction direction = Sort.Direction.DESC;
+        String fieldPassed = CREATED_AT_COLUMN;
+
+        List<Sort.Order> sortOrders = new ArrayList<>();
+        if (listOrders != null && listOrders.size() > 0) {
+            for (String field : listOrders) {
+                String[] fields = StringUtils.split(field, "-");
+                if (fields.length > 1) {
+                    if (DISPLAY_NAME.equalsIgnoreCase(fields[0])) {
+                        fieldPassed = DISPLAY_NAME;
+                        if (Constants.ORDER_ASCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.ASC;
+                        } else if (Constants.ORDER_DESCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.DESC;
+                        }
+                    } else if (PAYMENT_REFERENCE.equalsIgnoreCase(fields[0])) {
+                        fieldPassed = PAYMENT_REFERENCE;
+                        if (Constants.ORDER_ASCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.ASC;
+                        } else if (Constants.ORDER_DESCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.DESC;
+                        }
+                    } else if (ACCOUNT_COLUMN.equalsIgnoreCase(fields[0])) {
+                        fieldPassed = ACCOUNT_COLUMN;
+                        if (Constants.ORDER_ASCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.ASC;
+                        } else if (Constants.ORDER_DESCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.DESC;
+                        }
+                    }
+                    sortOrders.add(new Sort.Order(direction, fieldPassed));
+                }
+            }
+        }
+
+        Pageable pageable = PageRequest.of((pageNum - 1), pageSize,
+                Sort.by(sortOrders));
 
         if(isAdmin)  {
             //for admin user return all the contacts
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(userId, searchText);
 
             if(userId != null || searchText != null){
-                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
+                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification, pageable);
             }else{
-                beneficiaryEntities = beneficiaryRepository.findAll();
+                beneficiaryEntities = beneficiaryRepository.findAll(pageable);
             }
-
-            return loadRecords(beneficiaryEntities);
-
         }else{
             //normal user can only get contacts under logging user id
             String loggedInUserId = MembershipUtils.getUserId();
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(loggedInUserId, searchText);
 
             if(searchText != null){
-                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification);
+                beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification, pageable);
             }else{
-                beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId);
+                beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId, pageable);
             }
-
-            return loadRecords(beneficiaryEntities);
         }
+
+        Integer totalCount = beneficiaryEntities.getTotalPages();
+        PagingInformation paging = PagingInformation.builder().totalRecords(totalCount).pageNumber(pageNum)
+                .pageSize(pageSize).build();
+
+        return BeneficiaryResponse.builder()
+                .paging(paging)
+                .data(loadRecords(beneficiaryEntities.getContent()))
+                .build();
     }
 
     public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord){

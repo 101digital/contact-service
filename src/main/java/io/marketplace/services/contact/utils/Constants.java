@@ -4,7 +4,6 @@ public class Constants {
 
     public static final String RECEIVING_USER_INFORMATION_GET = "User information get response";
 
-
     public static final String RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY = "Get Beneficiaries";
     public static final String RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY = "Received request to search beneficiaries";
     public static final String RECV_GET_BEN_REQUEST = "POST.BENEFICIARIES.REQUEST";
@@ -29,4 +28,15 @@ public class Constants {
     public static final String SUPER_ROLE = "SuperAdmin";
 
     public static final String SERVICE_CODE = "UD";
+
+    public static final int DEFAULT_PAGE_NUMBER = 1;
+    public static final int DEFAULT_PAGE_SIZE = 10;
+
+    public static final String CREATED_AT_COLUMN = "createdAt";
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String PAYMENT_REFERENCE = "paymentReference";
+    public static final String ACCOUNT_COLUMN = "accountNumber";
+    public static final String ORDER_DESCENT = "DESC";
+    public static final String ORDER_ASCENT = "ASC";
+
 }

@@ -30,6 +30,27 @@ paths:
           schema:
             type: string
           example: abc
+        - name: listOrders
+          in: query
+          description: Results will be sorted and ordered based on the given criteria
+          required: false
+          schema:
+            type: string
+          example: firstName-DESC
+        - name: pageSize
+          in: query
+          description: Number of User Accounts returned per page/request
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: pageNum
+          in: query
+          description: Get User Accounts in a specific page number
+          required: false
+          schema:
+            type: integer
+            default: 1
       responses:
         503:
           description: Internal server error
@@ -178,6 +199,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeneficiaryData'
+        paging:
+          $ref: '#/components/schemas/PagingInformation'
     ServiceDataResponse:
       type: object
       properties:
@@ -185,7 +208,7 @@ components:
           type: array
           items:
             type: string
-        pagging:
+        paging:
           $ref: '#/components/schemas/PagingInformation'
         status:
           $ref: '#/components/schemas/ResponseStatus'
@@ -193,7 +216,7 @@ components:
       type: object
       properties:
         totalRecords:
-          type: number
+          type: integer
         pageSize:
           type: integer
         pageNumber:
@@ -224,7 +247,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BeneficiaryData'
-        pagging:
+        paging:
           $ref: '#/components/schemas/PagingInformation'
         status:
           $ref: '#/components/schemas/ResponseStatus'

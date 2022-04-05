@@ -1,19 +1,16 @@
 package io.marketplace.services.contact.api.delegate;
 
+import io.marketplace.commons.utils.StringUtils;
 import io.marketplace.services.contact.api.ContactsApiDelegate;
 import io.marketplace.services.contact.model.BeneficiaryCreateResponse;
-import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.BeneficiaryResponse;
 import io.marketplace.services.contact.service.ContactService;
-
 import io.marketplace.services.contact.utils.Constants;
 import io.marketplace.services.pxchange.client.annotation.PXLogEventMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static io.marketplace.services.contact.utils.Constants.SAVE_REQUEST_BUSINESS_DATA;
 import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA;
@@ -33,11 +30,14 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
     )
     @Override
     public ResponseEntity<BeneficiaryResponse> getContactList(String userId,
-                                                              String searchText) {
+                                                              String searchText,
+                                                              String listOrders,
+                                                              Integer pageSize,
+                                                              Integer pageNum) {
 
-        List<BeneficiaryData> contactList = contactService.getContactList(userId, searchText);
+        BeneficiaryResponse beneficiaryResponse = contactService.getContactList(userId, searchText, pageSize, pageNum, StringUtils.stringToList(listOrders));
 
-        return ResponseEntity.ok(BeneficiaryResponse.builder().data(contactList).build());
+        return ResponseEntity.ok(beneficiaryResponse);
     }
 
     @PXLogEventMessage(
