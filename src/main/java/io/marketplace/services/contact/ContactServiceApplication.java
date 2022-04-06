@@ -12,9 +12,10 @@ import io.marketplace.commons.logging.EventCategory;
 import io.marketplace.commons.logging.LogData;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class ContactServiceApplication {
 	
 	 private static final Logger log = LoggerFactory.getLogger(ContactServiceApplication.class);
