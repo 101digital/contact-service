@@ -136,7 +136,7 @@ public class ContactService {
             }
         }
 
-        Integer totalCount = beneficiaryEntities.getTotalPages();
+        Integer totalCount = (int)beneficiaryEntities.getTotalElements();
         PagingInformation paging = PagingInformation.builder().totalRecords(totalCount).pageNumber(pageNum)
                 .pageSize(pageSize).build();
 
