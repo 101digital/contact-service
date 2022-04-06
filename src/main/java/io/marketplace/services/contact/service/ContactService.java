@@ -136,7 +136,7 @@ public class ContactService {
             }
         }
 
-        Integer totalCount = Math.toIntExact(beneficiaryEntities.getTotalElements());
+        Integer totalCount = (int)beneficiaryEntities.getTotalElements();
         PagingInformation paging = PagingInformation.builder().totalRecords(totalCount).pageNumber(pageNum)
                 .pageSize(pageSize).build();
 

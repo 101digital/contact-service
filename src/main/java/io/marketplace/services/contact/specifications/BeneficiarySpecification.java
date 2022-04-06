@@ -7,6 +7,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BeneficiarySpecification implements Specification<BeneficiaryEntity> {
     private static final long serialVersionUID = 1L;
@@ -23,21 +25,26 @@ public class BeneficiarySpecification implements Specification<BeneficiaryEntity
     @Override
     public Predicate toPredicate(Root<BeneficiaryEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
+        Predicate p = criteriaBuilder.disjunction();
+        final List<Predicate> predicateList = new ArrayList<>();
 
-        Predicate userFilter = criteriaBuilder.equal(root.get("userId"), userId);
-
-        if(searchText != null){
-            Predicate displayNameFilter = criteriaBuilder.equal(root.get("displayName"), searchText);
-            Predicate mobileNumberFilter = criteriaBuilder.equal(root.get("mobileNumber"), searchText);
-            Predicate accountNumberFilter = criteriaBuilder.equal(root.get("accountNumber"), searchText);
-
-            Predicate searchTextPredicate
-                    = criteriaBuilder
-                    .or(displayNameFilter, mobileNumberFilter, accountNumberFilter);
-
-            return criteriaBuilder.and(userFilter, searchTextPredicate);
-        }else{
-            return criteriaBuilder.and(userFilter);
+        if(userId != null){
+            predicateList.add(criteriaBuilder.equal(root.get("userId"), userId));
         }
+
+        if(searchText != null) {
+            final String lowerText = searchText.toLowerCase();
+
+            predicateList.add(criteriaBuilder.or(
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("displayName")), "%" + lowerText + "%"),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("mobileNumber")), "%" + lowerText + "%"),
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("accountNumber")), "%" + lowerText + "%")));
+        }
+
+        Predicate[] predicates = new Predicate[predicateList.size()];
+        Predicate predicate = criteriaBuilder.and(predicateList.toArray(predicates));
+
+        p.getExpressions().add(predicate);
+        return p;
     }
 }
