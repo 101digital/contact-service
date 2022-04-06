@@ -106,6 +106,13 @@ public class ContactService {
                         } else if (Constants.ORDER_DESCENT.equalsIgnoreCase(fields[1])) {
                             direction = Sort.Direction.DESC;
                         }
+                    } else if (CREATED_AT_COLUMN.equalsIgnoreCase(fields[0])) {
+                        fieldPassed = CREATED_AT_COLUMN;
+                        if (Constants.ORDER_ASCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.ASC;
+                        } else if (Constants.ORDER_DESCENT.equalsIgnoreCase(fields[1])) {
+                            direction = Sort.Direction.DESC;
+                        }
                     }
                     sortOrders.add(new Sort.Order(direction, fieldPassed));
                 }
