@@ -44,7 +44,7 @@ paths:
           schema:
             type: integer
             default: 10
-        - name: pageNum
+        - name: pageNumber
           in: query
           description: Get User Accounts in a specific page number
           required: false
