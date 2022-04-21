@@ -18,4 +18,7 @@ public final class ErrorCode {
 
     public static final String KAFKA_CONSUMER_ERROR_MESSAGE = "Error in consuming kafka message for the topic :";
     public static final String KAFKA_CONSUMER_ERROR_CODE = "092.01.500.06";
+
+    public static final String CONTACT_CREATION_DUP_MESSAGE = "Contact creation failed due to paymentReference/accountNumber already exist";
+    public static final String CONTACT_CREATION_DUP_ERROR_CODE = "092.01.409.07";
 }

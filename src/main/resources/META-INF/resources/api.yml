@@ -129,6 +129,59 @@ paths:
                   type: string
       security:
         - Bearer: [ ]
+  /contacts/{id}:
+    delete:
+      tags:
+        - Contact
+      summary: Delete the contact using contact id
+      operationId: deleteContactById
+      parameters:
+        - name: id
+          in: path
+          description: contact id
+          required: true
+          schema:
+            type: string
+          example: 123
+      responses:
+        503:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        200:
+          description: Retrieve data succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryResponse'
+        404:
+          description: Data Not Found
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Input data is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Bearer: [ ]
   /beneficiaries:
     get:
       tags:

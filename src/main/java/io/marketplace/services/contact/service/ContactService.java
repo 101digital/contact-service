@@ -1,6 +1,8 @@
 package io.marketplace.services.contact.service;
 
+import io.marketplace.commons.exception.ConflictErrorException;
 import io.marketplace.commons.exception.GenericException;
+import io.marketplace.commons.exception.InternalServerErrorException;
 import io.marketplace.commons.exception.NotFoundException;
 import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
@@ -33,6 +35,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static io.marketplace.services.contact.utils.Constants.ACCOUNT_COLUMN;
 import static io.marketplace.services.contact.utils.Constants.CREATED_AT_COLUMN;
@@ -44,6 +48,8 @@ import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUS
 import static io.marketplace.services.contact.utils.Constants.SUCCESS_REQUEST_TO_SAVE_CONTACT;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_MESSAGE;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_ERROR_CODE;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_MESSAGE;
 
 @Service
 public class ContactService {
@@ -155,20 +161,78 @@ public class ContactService {
 
     public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord){
 
+        try {
+            String loggedInUserId = MembershipUtils.getUserId();
+
+            List<BeneficiaryEntity> beneficiaryEntities = beneficiaryRepository.
+                    findAllByPaymentReferenceOrAccountNumberAndUserId(beneficiaryRecord.getPaymentReference()
+                            , beneficiaryRecord.getAccountNumber(), loggedInUserId);
+
+            if (beneficiaryEntities.isEmpty()) {
+                //loggedIn user does not have contacts with same payment reference and account numbers
+                beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
+
+                // Generate event for adapter
+                pxClient.addEvent(EventMessage.builder()
+                        .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
+                        .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
+                        .eventCode(RECV_SAVE_REQUEST)
+                        .businessData(beneficiaryRecord.getPaymentReference() != null ?
+                                beneficiaryRecord.getPaymentReference() : "N/A")
+                        .build());
+
+                return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
+            } else {
+                //throwing exception because logged in user is having contacts
+                log.error(CONTACT_CREATION_DUP_MESSAGE, Error.of(CONTACT_CREATION_DUP_ERROR_CODE));
+                throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, loggedInUserId);
+            }
+
+        }
+        catch (ConflictErrorException ex){
+            throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, "");
+        }
+        catch (Exception e){
+            log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
+            throw new InternalServerErrorException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), null);
+        }
+    }
+
+    public BeneficiaryData deleteContact(String contactId){
+
         try{
-            beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
+
+            String loggedInUserId = MembershipUtils.getUserId();
+
+            Optional<BeneficiaryEntity> beneficiaryRecord = beneficiaryRepository.findByIdAndUserId(UUID.fromString(contactId), loggedInUserId);
+
+            if(beneficiaryRecord.isPresent()){
+                beneficiaryRepository.deleteById(UUID.fromString(contactId));
+                return BeneficiaryData.builder()
+                        .accountNumber(beneficiaryRecord.get().getAccountNumber())
+                        .displayName(beneficiaryRecord.get().getDisplayName())
+                        .paymentReference(beneficiaryRecord.get().getPaymentReference())
+                        .build();
+
+            }else{
+                throw new ConflictErrorException("Contact id not found in the system for the user " + loggedInUserId, "", "");
+            }
+
 
             // Generate event for adapter
-            pxClient.addEvent(EventMessage.builder()
-                    .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
-                    .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
-                    .eventCode(RECV_SAVE_REQUEST)
-                    .businessData(beneficiaryRecord.getPaymentReference() != null ?
-                            beneficiaryRecord.getPaymentReference() : "N/A")
-                    .build());
+//            pxClient.addEvent(EventMessage.builder()
+//                    .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
+//                    .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
+//                    .eventCode(RECV_SAVE_REQUEST)
+//                    .businessData(beneficiaryRecord.getPaymentReference() != null ?
+//                            beneficiaryRecord.getPaymentReference() : "N/A")
+//                    .build());
 
-            return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
-        }catch (Exception e){
+        }
+        catch (ConflictErrorException e){
+            throw new ConflictErrorException("Contact id not found in the system for the user ", "", "");
+        }
+        catch (Exception e){
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
             throw new GenericException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), "");
         }
