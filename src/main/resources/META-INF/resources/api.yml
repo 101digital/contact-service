@@ -319,6 +319,8 @@ components:
     BeneficiaryData:
       type: object
       properties:
+        id:
+          type: string
         displayName:
           type: string
         paymentReference:

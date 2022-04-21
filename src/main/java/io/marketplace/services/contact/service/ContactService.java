@@ -280,9 +280,10 @@ public class ContactService {
 
             beneficiaryDtoList.add(
                     BeneficiaryData.builder()
-                    .accountNumber(beneficiaryEntity.getAccountNumber())
-                    .displayName(beneficiaryEntity.getDisplayName())
-                    .paymentReference(beneficiaryEntity.getPaymentReference())
+                            .id(String.valueOf(beneficiaryEntity.getId()))
+                            .accountNumber(beneficiaryEntity.getAccountNumber())
+                            .displayName(beneficiaryEntity.getDisplayName())
+                            .paymentReference(beneficiaryEntity.getPaymentReference())
                     .build()
             );
         }
