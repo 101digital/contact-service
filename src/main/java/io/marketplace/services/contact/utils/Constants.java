@@ -14,6 +14,7 @@ public class Constants {
 
     public static final String RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY = "Create Contact";
     public static final String RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY = "Delete Contact";
+    public static final String DELETE_ACTIVITY = "Contact delete done";
 
     public static final String RECEIVING_THE_REQUEST_TO_SAVE_CONTACT = "Received request to create new contact";
     public static final String RECV_SAVE_REQUEST = "CREATE.CONTACT.REQUEST";
@@ -28,6 +29,7 @@ public class Constants {
     public static final String SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY = "mobileNumber: %s accountNumber: %s";
 
     public static final String SAVE_REQUEST_BUSINESS_DATA = "request: %s";
+    public static final String DELETE_REQUEST_BUSINESS_DATA = "contact id : %s";
 
     public static final String SUPER_ROLE = "SuperAdmin";
 

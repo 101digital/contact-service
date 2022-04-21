@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.marketplace.services.contact.utils.Constants.DELETE_REQUEST_BUSINESS_DATA;
 import static io.marketplace.services.contact.utils.Constants.SAVE_REQUEST_BUSINESS_DATA;
 import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA;
 
@@ -60,6 +61,13 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
                 .build());
     }
 
+    @PXLogEventMessage(
+            activityName = Constants.RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY,
+            eventCode = Constants.RECV_DELETE_REQUEST,
+            eventTitle = Constants.RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY,
+            businessIdName = {DELETE_REQUEST_BUSINESS_DATA},
+            businessIdIndex = {0}
+    )
     @Override
     public ResponseEntity<BeneficiaryResponse> deleteContactById(String contactId) {
 

@@ -40,6 +40,7 @@ import java.util.UUID;
 
 import static io.marketplace.services.contact.utils.Constants.ACCOUNT_COLUMN;
 import static io.marketplace.services.contact.utils.Constants.CREATED_AT_COLUMN;
+import static io.marketplace.services.contact.utils.Constants.DELETE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.DISPLAY_NAME;
 import static io.marketplace.services.contact.utils.Constants.PAYMENT_REFERENCE;
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY;
@@ -216,7 +217,7 @@ public class ContactService {
                 // Generate event for adapter
                 pxClient.addEvent(EventMessage.builder()
                         .activityName(RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY)
-                        .eventTitle(RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY)
+                        .eventTitle(DELETE_ACTIVITY)
                         .eventCode(RECV_DELETE_REQUEST)
                         .businessData("user id " + loggedInUserId)
                         .build());
