@@ -42,7 +42,9 @@ import static io.marketplace.services.contact.utils.Constants.ACCOUNT_COLUMN;
 import static io.marketplace.services.contact.utils.Constants.CREATED_AT_COLUMN;
 import static io.marketplace.services.contact.utils.Constants.DISPLAY_NAME;
 import static io.marketplace.services.contact.utils.Constants.PAYMENT_REFERENCE;
+import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY;
+import static io.marketplace.services.contact.utils.Constants.RECV_DELETE_REQUEST;
 import static io.marketplace.services.contact.utils.Constants.RECV_SAVE_REQUEST;
 import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY;
 import static io.marketplace.services.contact.utils.Constants.SUCCESS_REQUEST_TO_SAVE_CONTACT;
@@ -50,6 +52,8 @@ import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_D
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_MESSAGE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_MESSAGE;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_DELETE_ERROR_CODE;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_DELETE_MESSAGE;
 
 @Service
 public class ContactService {
@@ -208,6 +212,15 @@ public class ContactService {
 
             if(beneficiaryRecord.isPresent()){
                 beneficiaryRepository.deleteById(UUID.fromString(contactId));
+
+                // Generate event for adapter
+                pxClient.addEvent(EventMessage.builder()
+                        .activityName(RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY)
+                        .eventTitle(RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY)
+                        .eventCode(RECV_DELETE_REQUEST)
+                        .businessData("user id " + loggedInUserId)
+                        .build());
+
                 return BeneficiaryData.builder()
                         .accountNumber(beneficiaryRecord.get().getAccountNumber())
                         .displayName(beneficiaryRecord.get().getDisplayName())
@@ -215,22 +228,12 @@ public class ContactService {
                         .build();
 
             }else{
-                throw new ConflictErrorException("Contact id not found in the system for the user " + loggedInUserId, "", "");
+                throw new ConflictErrorException(CONTACT_DELETE_ERROR_CODE, CONTACT_DELETE_MESSAGE, loggedInUserId);
             }
-
-
-            // Generate event for adapter
-//            pxClient.addEvent(EventMessage.builder()
-//                    .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
-//                    .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
-//                    .eventCode(RECV_SAVE_REQUEST)
-//                    .businessData(beneficiaryRecord.getPaymentReference() != null ?
-//                            beneficiaryRecord.getPaymentReference() : "N/A")
-//                    .build());
 
         }
         catch (ConflictErrorException e){
-            throw new ConflictErrorException("Contact id not found in the system for the user ", "", "");
+            throw new ConflictErrorException(CONTACT_DELETE_ERROR_CODE, CONTACT_DELETE_MESSAGE, "");
         }
         catch (Exception e){
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));

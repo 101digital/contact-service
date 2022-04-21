@@ -13,8 +13,12 @@ public class Constants {
     public static final String RECV_GET_REQUEST = "GET.CONTACT.REQUEST";
 
     public static final String RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY = "Create Contact";
+    public static final String RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY = "Delete Contact";
+
     public static final String RECEIVING_THE_REQUEST_TO_SAVE_CONTACT = "Received request to create new contact";
     public static final String RECV_SAVE_REQUEST = "CREATE.CONTACT.REQUEST";
+    public static final String RECV_DELETE_REQUEST = "DELETE.CONTACT.REQUEST";
+
     public static final String SUCCESS_REQUEST_TO_SAVE_CONTACT = "Create new contact successful";
 
     public static final String RECEIVING_THE_REQUEST_TO_GET_WALLETS = "Get Wallet details";
