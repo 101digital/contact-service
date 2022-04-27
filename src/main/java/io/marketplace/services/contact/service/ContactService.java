@@ -171,7 +171,8 @@ public class ContactService {
 
             List<BeneficiaryEntity> beneficiaryEntities = beneficiaryRepository.
                     findAllByPaymentReferenceOrAccountNumberAndUserId(beneficiaryRecord.getPaymentReference()
-                            , beneficiaryRecord.getAccountNumber(), loggedInUserId);
+                            ,beneficiaryRecord.getAccountNumber(),
+                            loggedInUserId);
 
             if (beneficiaryEntities.isEmpty()) {
                 //loggedIn user does not have contacts with same payment reference and account numbers

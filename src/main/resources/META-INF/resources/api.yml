@@ -150,8 +150,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-        200:
-          description: Retrieve data succesfully
+        204:
+          description: Contact deleted successfully
           content:
             application/json:
               schema:

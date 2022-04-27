@@ -75,9 +75,6 @@ public class ContactApiDelegateImpl implements ContactsApiDelegate {
         List<BeneficiaryData> beneficiaryDataList = new ArrayList<>();
         beneficiaryDataList.add(beneficiaryData);
 
-        return ResponseEntity.ok(BeneficiaryResponse
-                .builder()
-                .data(beneficiaryDataList)
-                .build());
+        return ResponseEntity.noContent().build();
     }
 }
