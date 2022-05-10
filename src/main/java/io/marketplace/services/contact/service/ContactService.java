@@ -79,7 +79,7 @@ public class ContactService {
     private WalletServiceAdapter walletServiceAdapter;
 
 
-    public BeneficiaryResponse getContactList(String userId, String searchText, Integer pageSizeValue, Integer pageNumber, List<String> listOrders){
+    public BeneficiaryResponse getContactList(String userId, String searchText, Integer pageSizeValue, Integer pageNumber, List<String> listOrders) {
 
         Page<BeneficiaryEntity> beneficiaryEntities;
 
@@ -136,28 +136,28 @@ public class ContactService {
         Pageable pageable = PageRequest.of((pageNum - 1), pageSize,
                 Sort.by(sortOrders));
 
-        if(isAdmin)  {
+        if (isAdmin) {
             //for admin user return all the contacts
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(userId, searchText);
 
-            if(userId != null || searchText != null){
+            if (userId != null || searchText != null) {
                 beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification, pageable);
-            }else{
+            } else {
                 beneficiaryEntities = beneficiaryRepository.findAll(pageable);
             }
-        }else{
+        } else {
             //normal user can only get contacts under logging user id
             String loggedInUserId = MembershipUtils.getUserId();
             Specification<BeneficiaryEntity> beneficiaryEntitySpecification = new BeneficiarySpecification(loggedInUserId, searchText);
 
-            if(searchText != null){
+            if (searchText != null) {
                 beneficiaryEntities = beneficiaryRepository.findAll(beneficiaryEntitySpecification, pageable);
-            }else{
+            } else {
                 beneficiaryEntities = beneficiaryRepository.findAllByUserId(loggedInUserId, pageable);
             }
         }
 
-        Integer totalCount = (int)beneficiaryEntities.getTotalElements();
+        Integer totalCount = (int) beneficiaryEntities.getTotalElements();
         PagingInformation paging = PagingInformation.builder().totalRecords(totalCount).pageNumber(pageNum)
                 .pageSize(pageSize).build();
 
@@ -173,71 +173,74 @@ public class ContactService {
 
         try {
 
-            List<BeneficiaryEntity> beneficiaryEntities;
+            List<BeneficiaryEntity> beneficiaryEntities = new ArrayList<>();
             boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 
             String userId;
-            if(!isAdmin)  {
+            if (!isAdmin) {
                 userId = MembershipUtils.getUserId();
                 log.info("Creating Beneficiary request for user id : " + userId);
-            }else{
+            } else {
                 userId = beneficiaryRecord.getUserId();
                 log.info("Creating Beneficiary request for admin : " + userId);
             }
 
-            if(userId == null){
+            if (userId == null) {
                 throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, beneficiaryRecord.toString());
             }
 
-            if(!beneficiaryRecord.getAccountNumber().isEmpty()){
-                beneficiaryEntities =  beneficiaryRepository.findAllByAccountNumberAndUserId(beneficiaryRecord.getAccountNumber(), userId);
-            }else if(!beneficiaryRecord.getPaymentReference().isEmpty()){
-                beneficiaryEntities =  beneficiaryRepository.findAllByPaymentReferenceAndUserId(beneficiaryRecord.getPaymentReference(), userId);
-            }else{
+            if (beneficiaryRecord.getAccountNumber().isEmpty() && beneficiaryRecord.getPaymentReference().isEmpty()) {
                 //validation error, either account number or payment reference should provide
                 throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, beneficiaryRecord.toString());
             }
 
+            if (!beneficiaryRecord.getAccountNumber().isEmpty()) {
+                beneficiaryEntities = beneficiaryRepository.findAllByAccountNumberAndUserId(beneficiaryRecord.getAccountNumber(), userId);
+
+                if(beneficiaryEntities.isEmpty() && !beneficiaryRecord.getPaymentReference().isEmpty()){
+                    beneficiaryEntities = beneficiaryRepository.findAllByPaymentReferenceAndUserId(beneficiaryRecord.getPaymentReference(), userId);
+                }
+            }
             if (!beneficiaryEntities.isEmpty()) {
                 //throwing exception because logged in user is having contacts
                 log.error(CONTACT_CREATION_DUP_MESSAGE, Error.of(CONTACT_CREATION_DUP_ERROR_CODE));
                 throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, userId);
-            }else {
-
-                //loggedIn user does not have contacts with same payment reference and account numbers
-                beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord, userId));
-
-                // Generate event for adapter
-                pxClient.addEvent(EventMessage.builder()
-                        .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
-                        .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
-                        .eventCode(RECV_SAVE_REQUEST)
-                        .businessData(beneficiaryRecord.getPaymentReference() != null ?
-                                beneficiaryRecord.getPaymentReference() : "N/A")
-                        .build());
-
-                return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
             }
+
+            //loggedIn user does not have contacts with same payment reference and account numbers
+            beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord, userId));
+
+            // Generate event for adapter
+            pxClient.addEvent(EventMessage.builder()
+                    .activityName(RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY)
+                    .eventTitle(SUCCESS_REQUEST_TO_SAVE_CONTACT)
+                    .eventCode(RECV_SAVE_REQUEST)
+                    .businessData(beneficiaryRecord.getPaymentReference() != null ?
+                            beneficiaryRecord.getPaymentReference() : "N/A")
+                    .build());
+
+            return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
+
 
         } catch (ConflictErrorException ex) {
             throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, "");
         } catch (BadRequestException ex) {
             throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, "");
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
             throw new InternalServerErrorException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), null);
         }
     }
 
-    public BeneficiaryData deleteContact(String contactId){
+    public BeneficiaryData deleteContact(String contactId) {
 
-        try{
+        try {
 
             String loggedInUserId = MembershipUtils.getUserId();
 
             Optional<BeneficiaryEntity> beneficiaryRecord = beneficiaryRepository.findByIdAndUserId(UUID.fromString(contactId), loggedInUserId);
 
-            if(beneficiaryRecord.isPresent()){
+            if (beneficiaryRecord.isPresent()) {
                 beneficiaryRepository.deleteById(UUID.fromString(contactId));
 
                 // Generate event for adapter
@@ -254,56 +257,54 @@ public class ContactService {
                         .paymentReference(beneficiaryRecord.get().getPaymentReference())
                         .build();
 
-            }else{
+            } else {
                 throw new ConflictErrorException(CONTACT_DELETE_ERROR_CODE, CONTACT_DELETE_MESSAGE, loggedInUserId);
             }
 
-        }
-        catch (ConflictErrorException e){
+        } catch (ConflictErrorException e) {
             throw new ConflictErrorException(CONTACT_DELETE_ERROR_CODE, CONTACT_DELETE_MESSAGE, "");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
             throw new GenericException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), "");
         }
 
     }
 
-    public List<BeneficiaryData> getBeneficiaryInformation(String mobileNumber, String accountNumber){
+    public List<BeneficiaryData> getBeneficiaryInformation(String mobileNumber, String accountNumber) {
 
         log.info("getBeneficiaryInformation for mobileNumber : {} and accountNumber : {}", mobileNumber, accountNumber);
         String businessId = String.format(SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY, mobileNumber, accountNumber);
 
         WalletListResponse walletListResponse = null;
 
-        if(mobileNumber != null && !mobileNumber.isEmpty()){
+        if (mobileNumber != null && !mobileNumber.isEmpty()) {
             //get beneficiary details by mobile number
             UserListResponse userListResponse = membershipAdapter.getUserInformation(mobileNumber);
 
-            if(!userListResponse.getData().isEmpty()){
+            if (!userListResponse.getData().isEmpty()) {
                 //get the first userid and calling the wallet api
                 walletListResponse = walletServiceAdapter.getWalletInformation(userListResponse.getData().get(0).getUserId());
                 log.info("wallet api response for userId : {} response: {}", userListResponse.getData().get(0).getUserId(), walletListResponse);
             }
-        }else if(accountNumber != null && !accountNumber.isEmpty()){
+        } else if (accountNumber != null && !accountNumber.isEmpty()) {
             //get beneficiary details by account
             walletListResponse = walletServiceAdapter.getWalletInformationByAccountNumber(accountNumber);
             log.info("wallet api response for accountNumber : {} response: {}", accountNumber, walletListResponse);
         }
 
-        if(walletListResponse != null && walletListResponse.getData() != null && !walletListResponse.getData().isEmpty()){
+        if (walletListResponse != null && walletListResponse.getData() != null && !walletListResponse.getData().isEmpty()) {
             return beneficiaryMapper.transformFromWalletDtoToBeneficiaryType(walletListResponse.getData());
-        }else{
+        } else {
             throw new NotFoundException(ErrorCode.WALLET_NOT_FOUND_ERROR_CODE,
                     "Wallet not found for the business id : " + businessId, businessId);
         }
     }
 
-    List<BeneficiaryData> loadRecords(List<BeneficiaryEntity> beneficiaryEntities){
+    List<BeneficiaryData> loadRecords(List<BeneficiaryEntity> beneficiaryEntities) {
 
         List<BeneficiaryData> beneficiaryDtoList = new ArrayList<>();
 
-        for (BeneficiaryEntity beneficiaryEntity: beneficiaryEntities) {
+        for (BeneficiaryEntity beneficiaryEntity : beneficiaryEntities) {
 
             beneficiaryDtoList.add(
                     BeneficiaryData.builder()
@@ -311,7 +312,7 @@ public class ContactService {
                             .accountNumber(beneficiaryEntity.getAccountNumber())
                             .displayName(beneficiaryEntity.getDisplayName())
                             .paymentReference(beneficiaryEntity.getPaymentReference())
-                    .build()
+                            .build()
             );
         }
 
