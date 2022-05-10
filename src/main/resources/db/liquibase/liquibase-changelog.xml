@@ -9,5 +9,7 @@
 	<!-- ATTENTION: FILES ARE EXECUTED IN THE ORDER USED IN HERE -->
 	<include file="changelog/01-initialize-schema.xml"
 			 relativeToChangelogFile="true" />
+	<include file="changelog/02-required-fields-update.xml"
+			 relativeToChangelogFile="true" />
 
 </databaseChangeLog>

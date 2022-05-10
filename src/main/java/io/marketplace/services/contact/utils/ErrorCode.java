@@ -22,6 +22,9 @@ public final class ErrorCode {
     public static final String CONTACT_CREATION_DUP_MESSAGE = "Contact creation failed due to paymentReference/accountNumber already exist";
     public static final String CONTACT_CREATION_DUP_ERROR_CODE = "092.01.409.07";
 
+    public static final String CONTACT_CREATION_ERROR = "Contact creation failed due to invalid request";
+    public static final String CONTACT_CREATION_ERROR_CODE = "092.01.400.01";
+
     public static final String CONTACT_DELETE_MESSAGE = "Contact id not found in the system for the user";
     public static final String CONTACT_DELETE_ERROR_CODE = "092.01.409.08";
 }

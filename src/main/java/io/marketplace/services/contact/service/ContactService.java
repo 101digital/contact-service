@@ -1,5 +1,6 @@
 package io.marketplace.services.contact.service;
 
+import io.marketplace.commons.exception.BadRequestException;
 import io.marketplace.commons.exception.ConflictErrorException;
 import io.marketplace.commons.exception.GenericException;
 import io.marketplace.commons.exception.InternalServerErrorException;
@@ -53,6 +54,8 @@ import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_D
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DB_ERROR_MESSAGE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_DUP_MESSAGE;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_ERROR;
+import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_CREATION_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_DELETE_ERROR_CODE;
 import static io.marketplace.services.contact.utils.ErrorCode.CONTACT_DELETE_MESSAGE;
 
@@ -164,19 +167,45 @@ public class ContactService {
                 .build();
     }
 
-    public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord) {
+
+        log.info("createContact request payload : {}", beneficiaryRecord.toString());
 
         try {
-            String loggedInUserId = MembershipUtils.getUserId();
 
-            List<BeneficiaryEntity> beneficiaryEntities = beneficiaryRepository.
-                    findAllByPaymentReferenceOrAccountNumberAndUserId(beneficiaryRecord.getPaymentReference()
-                            ,beneficiaryRecord.getAccountNumber(),
-                            loggedInUserId);
+            List<BeneficiaryEntity> beneficiaryEntities;
+            boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
 
-            if (beneficiaryEntities.isEmpty()) {
+            String userId;
+            if(!isAdmin)  {
+                userId = MembershipUtils.getUserId();
+                log.info("Creating Beneficiary request for user id : " + userId);
+            }else{
+                userId = beneficiaryRecord.getUserId();
+                log.info("Creating Beneficiary request for admin : " + userId);
+            }
+
+            if(userId == null){
+                throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, beneficiaryRecord.toString());
+            }
+
+            if(!beneficiaryRecord.getAccountNumber().isEmpty()){
+                beneficiaryEntities =  beneficiaryRepository.findAllByAccountNumberAndUserId(beneficiaryRecord.getAccountNumber(), userId);
+            }else if(!beneficiaryRecord.getPaymentReference().isEmpty()){
+                beneficiaryEntities =  beneficiaryRepository.findAllByPaymentReferenceAndUserId(beneficiaryRecord.getPaymentReference(), userId);
+            }else{
+                //validation error, either account number or payment reference should provide
+                throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, beneficiaryRecord.toString());
+            }
+
+            if (!beneficiaryEntities.isEmpty()) {
+                //throwing exception because logged in user is having contacts
+                log.error(CONTACT_CREATION_DUP_MESSAGE, Error.of(CONTACT_CREATION_DUP_ERROR_CODE));
+                throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, userId);
+            }else {
+
                 //loggedIn user does not have contacts with same payment reference and account numbers
-                beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord));
+                beneficiaryRepository.save(beneficiaryMapper.toBeneficiaryEntity(beneficiaryRecord, userId));
 
                 // Generate event for adapter
                 pxClient.addEvent(EventMessage.builder()
@@ -188,17 +217,13 @@ public class ContactService {
                         .build());
 
                 return beneficiaryMapper.transformFromBeneficiaryRecordToBeneficiaryDto(beneficiaryRecord);
-            } else {
-                //throwing exception because logged in user is having contacts
-                log.error(CONTACT_CREATION_DUP_MESSAGE, Error.of(CONTACT_CREATION_DUP_ERROR_CODE));
-                throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, loggedInUserId);
             }
 
-        }
-        catch (ConflictErrorException ex){
+        } catch (ConflictErrorException ex) {
             throw new ConflictErrorException(CONTACT_CREATION_DUP_ERROR_CODE, CONTACT_CREATION_DUP_MESSAGE, "");
-        }
-        catch (Exception e){
+        } catch (BadRequestException ex) {
+            throw new BadRequestException(CONTACT_CREATION_ERROR_CODE, CONTACT_CREATION_ERROR, "");
+        } catch (Exception e){
             log.error(CONTACT_CREATION_DB_ERROR_MESSAGE, Error.of(CONTACT_CREATION_DB_ERROR_CODE));
             throw new InternalServerErrorException(CONTACT_CREATION_DB_ERROR_CODE, e.getMessage(), null);
         }

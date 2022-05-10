@@ -2,12 +2,10 @@ package io.marketplace.services.contact.mapper;
 
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
-import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.Wallet;
-import io.marketplace.services.contact.utils.Constants;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,18 +17,9 @@ public class BeneficiaryMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeneficiaryMapper.class);
 
-    public BeneficiaryEntity toBeneficiaryEntity(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryEntity toBeneficiaryEntity(BeneficiaryRecord beneficiaryRecord, String userId){
 
-        boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
-        String userId;
 
-        if(!isAdmin)  {
-            userId = MembershipUtils.getUserId();
-            LOGGER.info("Creating Beneficiary request for user id : " + userId);
-        }else{
-            userId = beneficiaryRecord.getUserId();
-            LOGGER.info("Creating Beneficiary request for admin : " + userId);
-        }
 
         return BeneficiaryEntity.builder()
                 .id(UUID.randomUUID())
