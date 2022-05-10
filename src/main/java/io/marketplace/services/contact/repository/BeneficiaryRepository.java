@@ -16,6 +16,7 @@ public interface BeneficiaryRepository extends JpaRepository<BeneficiaryEntity, 
 
      List<BeneficiaryEntity> findAllByUserIdAndDisplayName(String userId, String displayName);
      Page<BeneficiaryEntity> findAllByUserId(String userId, Pageable pageable);
-     List<BeneficiaryEntity> findAllByPaymentReferenceOrAccountNumberAndUserId(String paymentReference, String accountNumber, String userId);
+     List<BeneficiaryEntity> findAllByPaymentReferenceAndUserId(String paymentReference, String userId);
+     List<BeneficiaryEntity> findAllByAccountNumberAndUserId(String accountNumber, String userId);
      Optional<BeneficiaryEntity> findByIdAndUserId(UUID fromString, String userId);
 }
