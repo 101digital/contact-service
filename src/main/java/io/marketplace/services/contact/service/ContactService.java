@@ -24,6 +24,7 @@ import io.marketplace.services.contact.repository.BeneficiaryRepository;
 import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
 import io.marketplace.services.contact.utils.ErrorCode;
+import io.marketplace.services.pxchange.client.annotation.PXLogEventMessage;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -167,6 +168,8 @@ public class ContactService {
                 .build();
     }
 
+    @PXLogEventMessage(activityName = Constants.RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY,
+            eventTitle = "Create a new contact in the database", eventCode = Constants.RECV_SAVE_REQUEST)
     public BeneficiaryData createContact(BeneficiaryRecord beneficiaryRecord) {
 
         log.info("createContact request payload : {}", beneficiaryRecord.toString());
