@@ -196,11 +196,12 @@ public class ContactService {
 
             if (!beneficiaryRecord.getAccountNumber().isEmpty()) {
                 beneficiaryEntities = beneficiaryRepository.findAllByAccountNumberAndUserId(beneficiaryRecord.getAccountNumber(), userId);
-
-                if(beneficiaryEntities.isEmpty() && !beneficiaryRecord.getPaymentReference().isEmpty()){
-                    beneficiaryEntities = beneficiaryRepository.findAllByPaymentReferenceAndUserId(beneficiaryRecord.getPaymentReference(), userId);
-                }
             }
+
+            if(beneficiaryEntities.isEmpty() && !beneficiaryRecord.getPaymentReference().isEmpty()){
+                beneficiaryEntities = beneficiaryRepository.findAllByPaymentReferenceAndUserId(beneficiaryRecord.getPaymentReference(), userId);
+            }
+
             if (!beneficiaryEntities.isEmpty()) {
                 //throwing exception because logged in user is having contacts
                 log.error(CONTACT_CREATION_DUP_MESSAGE, Error.of(CONTACT_CREATION_DUP_ERROR_CODE));
