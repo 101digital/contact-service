@@ -13,7 +13,7 @@ public final class ErrorCode {
     public static final String WALLET_SEARCH_VIA_USER_ERROR_CODE = "092.01.500.04";
     public static final String WALLET_SEARCH_VIA_USER_ERROR_MESSAGE = "Error occurred when getting wallet information using userId";
 
-    public static final String WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE = "092.01.500.05";
+    public static final String WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE = "092.01.404.05";
     public static final String WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE = "Error occurred when getting wallet information using account number";
 
     public static final String KAFKA_CONSUMER_ERROR_MESSAGE = "Error in consuming kafka message for the topic :";

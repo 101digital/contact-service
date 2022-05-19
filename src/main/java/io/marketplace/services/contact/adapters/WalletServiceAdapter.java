@@ -2,6 +2,7 @@ package io.marketplace.services.contact.adapters;
 
 import com.google.gson.Gson;
 import io.marketplace.commons.exception.InternalServerErrorException;
+import io.marketplace.commons.exception.NotFoundException;
 import io.marketplace.commons.exception.UnauthorizedException;
 import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
@@ -121,7 +122,7 @@ public class WalletServiceAdapter {
                 return response.getBody();
             }
         } catch (HttpClientErrorException ex){
-            throw new UnauthorizedException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE,
+            throw new NotFoundException(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE,
                 WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE, accountNumber);
         } catch (Exception ex){
             LOG.error(WALLET_SEARCH_VIA_ACCOUNT_ERROR_MESSAGE + ex.getMessage(), Error.of(WALLET_SEARCH_VIA_ACCOUNT_ERROR_CODE), ex);
