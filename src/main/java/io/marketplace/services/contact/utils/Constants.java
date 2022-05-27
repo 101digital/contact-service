@@ -32,6 +32,7 @@ public class Constants {
     public static final String DELETE_REQUEST_BUSINESS_DATA = "contact id : %s";
 
     public static final String SUPER_ROLE = "SuperAdmin";
+    public static final String PERMISSION_GET_CONTACT_LIST = "GET_CONTACT_LIST";
 
     public static final String SERVICE_CODE = "UD";
 

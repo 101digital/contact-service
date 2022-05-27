@@ -45,6 +45,7 @@ import static io.marketplace.services.contact.utils.Constants.CREATED_AT_COLUMN;
 import static io.marketplace.services.contact.utils.Constants.DELETE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.DISPLAY_NAME;
 import static io.marketplace.services.contact.utils.Constants.PAYMENT_REFERENCE;
+import static io.marketplace.services.contact.utils.Constants.PERMISSION_GET_CONTACT_LIST;
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_DELETE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.RECEIVING_THE_REQUEST_TO_SAVE_ACTIVITY;
 import static io.marketplace.services.contact.utils.Constants.RECV_DELETE_REQUEST;
@@ -84,7 +85,7 @@ public class ContactService {
 
         Page<BeneficiaryEntity> beneficiaryEntities;
 
-        boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
+        boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE) || MembershipUtils.hasPermission(PERMISSION_GET_CONTACT_LIST);
 
         Integer pageNum = pageNumber != null && pageNumber > 0 ? pageNumber
                 : Constants.DEFAULT_PAGE_NUMBER;
@@ -177,7 +178,7 @@ public class ContactService {
         try {
 
             List<BeneficiaryEntity> beneficiaryEntities = new ArrayList<>();
-            boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE);
+            boolean isAdmin = MembershipUtils.hasRole(Constants.SUPER_ROLE) || MembershipUtils.hasPermission(PERMISSION_GET_CONTACT_LIST);
 
             String userId;
             if (!isAdmin) {
