@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 public class BeneficiaryMapper {
 
-    @Value("${contact.lookup.mask-account:false}")
+    @Value("${contact.lookup.mask-account-number:false}")
     private Boolean maskAccountNumberFlag;
 
     @Value("${contact.lookup.mask-account-name:true}")
