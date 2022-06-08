@@ -45,5 +45,12 @@ public class Constants {
     public static final String ACCOUNT_COLUMN = "accountNumber";
     public static final String ORDER_DESCENT = "DESC";
     public static final String ORDER_ASCENT = "ASC";
+    
+    public static final String EVENT_CODE_UPDATE_USER_CUSTOM_FIELD = "PUT.USER.CUSTOM_FIELD";
+    public static final String EVENT_TRACKING_UPDATE_USER_PROFILE = "Update User Profile";
+    public static final String USER_ENTITY = "User";
+    
+    public static final String USER_ATTACK_LOOKUP_BENEFICIARY_KEY = "TwoManyRequestLookupBeneficiary";
+    public static final String USER_ATTACK_LOOKUP_BENEFICIARY_VALUE = "Yes";
 
 }

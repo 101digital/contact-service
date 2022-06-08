@@ -10,12 +10,17 @@ import io.marketplace.commons.logging.Error;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.model.ShortTermCache;
+import io.marketplace.commons.model.event.EventCategory;
 import io.marketplace.commons.model.event.EventMessage;
+import io.marketplace.commons.model.event.EventStatus;
+import io.marketplace.commons.model.event.EventType;
 import io.marketplace.commons.utils.MembershipUtils;
 import io.marketplace.services.contact.adapters.MembershipAdapter;
 import io.marketplace.services.contact.adapters.WalletServiceAdapter;
 import io.marketplace.services.contact.adapters.dto.UserListResponse;
 import io.marketplace.services.contact.adapters.dto.WalletListResponse;
+import io.marketplace.services.contact.dto.UserCustomField;
+import io.marketplace.services.contact.dto.UserDataChanged;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.mapper.BeneficiaryMapper;
 import io.marketplace.services.contact.model.BeneficiaryData;
@@ -27,6 +32,7 @@ import io.marketplace.services.contact.specifications.BeneficiarySpecification;
 import io.marketplace.services.contact.utils.Constants;
 import io.marketplace.services.contact.utils.ErrorCode;
 import io.marketplace.services.pxchange.client.annotation.PXLogEventMessage;
+import io.marketplace.services.pxchange.client.service.EventServiceClient;
 import io.marketplace.services.pxchange.client.service.PXChangeServiceClient;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +45,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import com.google.common.collect.ImmutableList;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -89,11 +97,17 @@ public class ContactService {
     @Autowired
     private ShortTermCache shortermCached;
 
+    @Autowired
+    private EventServiceClient eventServiceClient;
+
     @Value("${contact.lookup.max-attempts:3}")
     private Integer lookupContactAttempts;
 
     @Value("${contact.lookup.max-duration:60}")
     private Integer lookupContactAttemptsDuration;
+
+    @Value("${kafka.topic.user.data-changed:user-data-changed}")
+    private String userDataChangedTopic;
 
     public BeneficiaryResponse getContactList(String userId, String searchText, Integer pageSizeValue,
             Integer pageNumber, List<String> listOrders) {
@@ -315,11 +329,17 @@ public class ContactService {
                         .activityName(Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY)
                         .eventTitle(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE)
                         .eventCode(Constants.RECV_GET_BEN_REQUEST)
-                        .businessData("user id " + userId)
+                        .businessData("user id: " + userId)
                         .build());
-
                 log.error(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE,
                         Error.of(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE));
+
+                // Marking customer with high risk
+                sendUserDataChanged(userId, ImmutableList.of(
+                        UserCustomField.builder().customKey(
+                                Constants.USER_ATTACK_LOOKUP_BENEFICIARY_KEY)
+                                .customValue(Constants.USER_ATTACK_LOOKUP_BENEFICIARY_VALUE)
+                                .build()));
 
                 throw ApiResponseException
                         .builder()
@@ -382,5 +402,23 @@ public class ContactService {
         }
 
         return beneficiaryDtoList;
+    }
+
+    private void sendUserDataChanged(String userId, List<UserCustomField> listCustomFields) {
+        if (listCustomFields == null || listCustomFields.isEmpty()) {
+            return;
+        }
+        UserDataChanged userDataChanged = UserDataChanged.builder().userId(userId)
+                .listCustomFields(listCustomFields)
+                .build();
+        EventMessage<UserDataChanged> userDataChangedEvent = eventServiceClient.buildEventMessage(userDataChanged);
+        userDataChangedEvent.setEventType(EventType.UPDATE);
+        userDataChangedEvent.setEventCode(Constants.EVENT_CODE_UPDATE_USER_CUSTOM_FIELD);
+        userDataChangedEvent.setEventStatus(EventStatus.SUCCESS);
+        userDataChangedEvent.setEventCategory(EventCategory.EVENT);
+        userDataChangedEvent.setEventUser(MembershipUtils.getUserId());
+        userDataChangedEvent.setEventEntity(Constants.USER_ENTITY);
+        userDataChangedEvent.setEventTitle(Constants.EVENT_TRACKING_UPDATE_USER_PROFILE);
+        eventServiceClient.addEvent(userDataChangedTopic, userDataChangedEvent);
     }
 }
