@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ComponentScan({"io.marketplace.commons.gson",
-        "io.marketplace.services.pxchange.client"})
+        "io.marketplace.services.pxchange.client",
+        "io.marketplace.commons.exception"})
 @Import({
         io.marketplace.commons.config.BaseSerializationConfig.class,
         io.marketplace.commons.config.GsonConfiguration.class,
