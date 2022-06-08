@@ -301,7 +301,8 @@ public class ContactService {
     public List<BeneficiaryData> getBeneficiaryInformationWithRateLimit(String mobileNumber, String accountNumber) {
         final String userId = MembershipUtils.getUserId();
         try {
-
+            log.info("Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}",
+                    mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration);
             return shortermCached.runWithRateLimiter("lookup-contact-" + userId, lookupContactAttempts,
                     Duration.ofSeconds(lookupContactAttemptsDuration),
                     () -> getBeneficiaryInformation(mobileNumber, accountNumber));
