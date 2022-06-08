@@ -6,7 +6,7 @@ public class Constants {
 
     public static final String RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY = "Get Beneficiaries";
     public static final String RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY = "Received request to search beneficiaries";
-    public static final String RECV_GET_BEN_REQUEST = "POST.BENEFICIARIES.REQUEST";
+    public static final String RECV_GET_BEN_REQUEST = "GET.BENEFICIARIES.REQUEST";
 
     public static final String RECEIVING_THE_REQUEST_TO_GET_ACTIVITY = "Get Contact";
     public static final String RECEIVING_THE_REQUEST_TO_GET = "Received request to search contact";

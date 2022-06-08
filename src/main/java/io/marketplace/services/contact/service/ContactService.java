@@ -89,10 +89,10 @@ public class ContactService {
     @Autowired
     private ShortTermCache shortermCached;
 
-    @Value("${contact.lookup.max-attempts:1}")
+    @Value("${contact.lookup.max-attempts:3}")
     private Integer lookupContactAttempts;
 
-    @Value("${contact.lookup.max-duration:3}")
+    @Value("${contact.lookup.max-duration:60}")
     private Integer lookupContactAttemptsDuration;
 
     public BeneficiaryResponse getContactList(String userId, String searchText, Integer pageSizeValue,
@@ -313,13 +313,13 @@ public class ContactService {
                 pxClient.addEvent(EventMessage.builder()
                         .activityName(Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY)
                         .eventTitle(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE)
-                        .eventCode(Constants.RECV_GET_REQUEST)
+                        .eventCode(Constants.RECV_GET_BEN_REQUEST)
                         .businessData("user id " + userId)
                         .build());
 
                 log.error(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE,
                         Error.of(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE));
-                throw new GenericException(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE,
+                throw new ApiResponseException(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE,
                         ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE, userId);
             }
             throw new InternalServerErrorException(ErrorCode.CONTACT_LOOKUP_INTERNAL_ERROR_CODE,
