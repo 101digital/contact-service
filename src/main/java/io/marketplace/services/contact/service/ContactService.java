@@ -103,8 +103,11 @@ public class ContactService {
     @Value("${contact.lookup.max-attempts:3}")
     private Integer lookupContactAttempts;
 
-    @Value("${contact.lookup.max-duration:60}")
+    @Value("${contact.lookup.max-duration:1}")
     private Integer lookupContactAttemptsDuration;
+    
+    @Value("${contact.lookup.block-duration:5}")
+    private Integer lookupContactBlockDuration;
 
     @Value("${kafka.topic.user.data-changed:user-data-changed}")
     private String userDataChangedTopic;
@@ -316,10 +319,10 @@ public class ContactService {
         final String userId = MembershipUtils.getUserId();
         try {
             log.info(
-                    "Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, userId: {}",
-                    mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration, userId);
+                    "Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, lookupContactBlockDuration: {}, userId: {}",
+                    mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration, lookupContactBlockDuration, userId);
             return shortermCached.runWithRateLimiter("lookup-beneficiary-" + userId, lookupContactAttempts,
-                    Duration.ofMinutes(lookupContactAttemptsDuration),
+                    Duration.ofMinutes(lookupContactAttemptsDuration), Duration.ofMinutes(lookupContactBlockDuration),
                     () -> getBeneficiaryInformation(mobileNumber, accountNumber));
         } catch (ApiResponseException ex) {
             // Handle exception two many request
