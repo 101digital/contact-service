@@ -1,12 +1,12 @@
 package io.marketplace.services.contact.mapper;
 
-import io.marketplace.commons.logging.Logger;
-import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.commons.utils.StringUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.Wallet;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +16,11 @@ import java.util.UUID;
 @Component
 public class BeneficiaryMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BeneficiaryMapper.class);
+    @Value("${contact.lookup.mask-account:false}")
+    private Boolean maskAccountNumberFlag;
+
+    @Value("${contact.lookup.mask-account-name:true}")
+    private Boolean maskAccountNameFlag;
 
     public BeneficiaryEntity toBeneficiaryEntity(BeneficiaryRecord beneficiaryRecord, String userId) {
 
@@ -48,12 +52,14 @@ public class BeneficiaryMapper {
 
         for (Wallet walletObject : walletDtos) {
             String accountNumber = walletObject.getBankAccount().getAccountNumber();
-            String maskAccountNumber = StringUtils.isNotEmpty(accountNumber) && accountNumber.length() > 4
-                    ? maskString(accountNumber, 0, accountNumber.length() - 4, 'x')
-                    : accountNumber;
+            String maskAccountNumber = maskAccountNumberFlag && StringUtils.isNotEmpty(accountNumber)
+                    && accountNumber.length() > 4
+                            ? maskString(accountNumber, 0, accountNumber.length() - 4, 'x')
+                            : accountNumber;
 
             String displayName = walletObject.getBankAccount().getAccountHolderName();
-            String maskDisplayName = StringUtils.isNotEmpty(displayName) ? maskName(displayName) : displayName;
+            String maskDisplayName = maskAccountNameFlag && StringUtils.isNotEmpty(displayName) ? maskName(displayName)
+                    : displayName;
             beneficiaryDtoList.add(BeneficiaryData.builder()
                     .accountNumber(maskAccountNumber)
                     .displayName(maskDisplayName)
@@ -92,14 +98,17 @@ public class BeneficiaryMapper {
 
     private String maskString(String strText, int start, int end, char maskChar) {
 
-        if (strText == null || strText.equals(""))
+        if (strText == null || strText.equals("")) {
             return "";
+        }
 
-        if (start < 0)
+        if (start < 0) {
             start = 0;
+        }
 
-        if (end > strText.length())
+        if (end > strText.length()) {
             end = strText.length();
+        }
 
         if (start > end) {
             return strText;
@@ -107,8 +116,9 @@ public class BeneficiaryMapper {
 
         int maskLength = end - start;
 
-        if (maskLength == 0)
+        if (maskLength == 0) {
             return strText;
+        }
 
         StringBuilder sbMaskString = new StringBuilder(maskLength);
 
