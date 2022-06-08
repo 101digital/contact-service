@@ -105,7 +105,7 @@ public class ContactService {
 
     @Value("${contact.lookup.max-duration:1}")
     private Integer lookupContactAttemptsDuration;
-    
+
     @Value("${contact.lookup.block-duration:5}")
     private Integer lookupContactBlockDuration;
 
@@ -317,16 +317,34 @@ public class ContactService {
 
     public List<BeneficiaryData> getBeneficiaryInformationWithRateLimit(String mobileNumber, String accountNumber) {
         final String userId = MembershipUtils.getUserId();
+        // Check block duration
+        final String blockDurationKey = "block-lookup-beneficiary-" + userId;
+        Optional<String> blockDurationValue = shortermCached.get(blockDurationKey, String.class);
+        if (blockDurationValue.isPresent()
+                && io.marketplace.commons.utils.StringUtils.isNotEmpty(blockDurationValue.get())) {
+            throw ApiResponseException
+                    .builder()
+                    .httpStatus(HttpStatus.TOO_MANY_REQUESTS.value())
+                    .code(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE)
+                    .message(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE)
+                    .build();
+        }
+
         try {
             log.info(
                     "Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, lookupContactBlockDuration: {}, userId: {}",
-                    mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration, lookupContactBlockDuration, userId);
+                    mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration,
+                    lookupContactBlockDuration, userId);
+
+            // Call target method
             return shortermCached.runWithRateLimiter("lookup-beneficiary-" + userId, lookupContactAttempts,
-                    Duration.ofMinutes(lookupContactAttemptsDuration), Duration.ofMinutes(lookupContactBlockDuration),
+                    Duration.ofMinutes(lookupContactAttemptsDuration),
                     () -> getBeneficiaryInformation(mobileNumber, accountNumber));
         } catch (ApiResponseException ex) {
             // Handle exception two many request
             if (HttpStatus.TOO_MANY_REQUESTS.value() == ex.getHttpStatus()) {
+                shortermCached.set(blockDurationKey, blockDurationKey, Duration.ofMinutes(lookupContactBlockDuration));
+
                 // Add the event tracking
                 pxClient.addEvent(EventMessage.builder()
                         .activityName(Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY)
