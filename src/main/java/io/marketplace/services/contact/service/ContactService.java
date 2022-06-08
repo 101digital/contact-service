@@ -301,7 +301,8 @@ public class ContactService {
     public List<BeneficiaryData> getBeneficiaryInformationWithRateLimit(String mobileNumber, String accountNumber) {
         final String userId = MembershipUtils.getUserId();
         try {
-            log.info("Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, userId: {}",
+            log.info(
+                    "Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, userId: {}",
                     mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration, userId);
             return shortermCached.runWithRateLimiter("lookup-contact-" + userId, lookupContactAttempts,
                     Duration.ofMinutes(lookupContactAttemptsDuration),
@@ -319,8 +320,13 @@ public class ContactService {
 
                 log.error(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE,
                         Error.of(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE));
-                throw new ApiResponseException(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE,
-                        ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE, userId);
+
+                throw ApiResponseException
+                        .builder()
+                        .httpStatus(HttpStatus.TOO_MANY_REQUESTS.value())
+                        .code(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_CODE)
+                        .message(ErrorCode.CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE)
+                        .build();
             }
             throw new InternalServerErrorException(ErrorCode.CONTACT_LOOKUP_INTERNAL_ERROR_CODE,
                     ErrorCode.CONTACT_LOOKUP_INTERNAL_ERROR_MESSAGE, userId);
