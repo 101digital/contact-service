@@ -27,4 +27,10 @@ public final class ErrorCode {
 
     public static final String CONTACT_DELETE_MESSAGE = "Contact id not found in the system for the user";
     public static final String CONTACT_DELETE_ERROR_CODE = "092.01.409.08";
+    
+    public static final String CONTACT_LOOKUP_LIMIT_ERROR_MESSAGE = "Too Many Requests to lookup the beneficiary.";
+    public static final String CONTACT_LOOKUP_LIMIT_ERROR_CODE = "092.01.500.07";
+    
+    public static final String CONTACT_LOOKUP_INTERNAL_ERROR_MESSAGE = "092.01.500.08";
+    public static final String CONTACT_LOOKUP_INTERNAL_ERROR_CODE = "Error occurred when looking up the beneficiary.";
 }

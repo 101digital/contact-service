@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Import;
 @Import({
         io.marketplace.commons.config.BaseSerializationConfig.class,
         io.marketplace.commons.config.GsonConfiguration.class,
+        io.marketplace.commons.config.RedisConfig.class,
+        io.marketplace.commons.config.CacheConfig.class,
         io.marketplace.commons.config.RestTemplateConfig.class,
         io.marketplace.commons.config.HttpClientConfig.class,
         io.marketplace.commons.config.ConversionServiceConfiguration.class,

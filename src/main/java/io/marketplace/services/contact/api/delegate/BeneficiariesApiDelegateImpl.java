@@ -17,22 +17,17 @@ import static io.marketplace.services.contact.utils.Constants.SEARCH_REQUEST_BUS
 @Service
 public class BeneficiariesApiDelegateImpl implements BeneficiariesApiDelegate {
 
-
     @Autowired
     private ContactService contactService;
 
-    @PXLogEventMessage(
-            activityName = Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY,
-            eventCode = Constants.RECV_GET_BEN_REQUEST,
-            eventTitle = Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY,
-            businessIdName = {SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY},
-            businessIdIndex = {0, 1}
-    )
+    @PXLogEventMessage(activityName = Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY_ACTIVITY, eventCode = Constants.RECV_GET_BEN_REQUEST, eventTitle = Constants.RECEIVING_THE_REQUEST_TO_GET_BENEFICIARY, businessIdName = {
+            SEARCH_REQUEST_BUSINESS_DATA_BENEFICIARY }, businessIdIndex = { 0, 1 })
     @Override
     public ResponseEntity<WalletResponse> lookupBeneficiary(String mobileNumber,
-                                                                 String accountNumber) {
+            String accountNumber) {
 
-        List<BeneficiaryData> beneficiaryDtoList = contactService.getBeneficiaryInformation(mobileNumber, accountNumber);
+        List<BeneficiaryData> beneficiaryDtoList = contactService.getBeneficiaryInformationWithRateLimit(mobileNumber,
+                accountNumber);
 
         return ResponseEntity.ok(WalletResponse
                 .builder()
