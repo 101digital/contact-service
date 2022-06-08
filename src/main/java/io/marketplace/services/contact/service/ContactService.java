@@ -304,7 +304,7 @@ public class ContactService {
             log.info("Start to lookup beneficiary by mobileNumber: {}, accountNumber: {}, limit: {}, duration: {}, userId: {}",
                     mobileNumber, accountNumber, lookupContactAttempts, lookupContactAttemptsDuration, userId);
             return shortermCached.runWithRateLimiter("lookup-contact-" + userId, lookupContactAttempts,
-                    Duration.ofSeconds(lookupContactAttemptsDuration),
+                    Duration.ofMinutes(lookupContactAttemptsDuration),
                     () -> getBeneficiaryInformation(mobileNumber, accountNumber));
         } catch (ApiResponseException ex) {
             // Handle exception two many request
