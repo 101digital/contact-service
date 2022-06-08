@@ -88,7 +88,7 @@ public class BeneficiaryMapper {
             if (index == 0) {
                 sbName.append(nameItem);
             } else if (nameItem.length() >= 1) {
-                sbName.append(nameItem.substring(0, 1).toUpperCase());
+                sbName.append(nameItem.substring(0, 1).toUpperCase() + ".");
             }
             sbName.append(" ");
             index++;
