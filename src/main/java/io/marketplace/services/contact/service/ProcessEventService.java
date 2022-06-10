@@ -1,6 +1,5 @@
 package io.marketplace.services.contact.service;
 
-import com.google.gson.Gson;
 import io.marketplace.commons.logging.Logger;
 import io.marketplace.commons.logging.LoggerFactory;
 import io.marketplace.services.contact.model.BeneficiaryRecord;

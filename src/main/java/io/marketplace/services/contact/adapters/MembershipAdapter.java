@@ -35,7 +35,7 @@ public class MembershipAdapter {
     @Autowired
     private Gson gsonInstance;
 
-    @Value("${membership.server.base-url}")
+    @Value("${membership.server.base-url:http://membership-service:8080}")
     private String membershipServiceUrl;
 
     @Autowired

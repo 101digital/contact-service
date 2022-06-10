@@ -1,11 +1,12 @@
 package io.marketplace.services.contact.mapper;
 
-import io.marketplace.commons.logging.Logger;
-import io.marketplace.commons.logging.LoggerFactory;
+import io.marketplace.commons.utils.StringUtils;
 import io.marketplace.services.contact.entity.BeneficiaryEntity;
 import io.marketplace.services.contact.model.BeneficiaryData;
 import io.marketplace.services.contact.model.BeneficiaryRecord;
 import io.marketplace.services.contact.model.Wallet;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ import java.util.UUID;
 @Component
 public class BeneficiaryMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BeneficiaryMapper.class);
+    @Value("${contact.lookup.mask-account-number:false}")
+    private Boolean maskAccountNumberFlag;
 
-    public BeneficiaryEntity toBeneficiaryEntity(BeneficiaryRecord beneficiaryRecord, String userId){
+    @Value("${contact.lookup.mask-account-name:true}")
+    private Boolean maskAccountNameFlag;
 
-
+    public BeneficiaryEntity toBeneficiaryEntity(BeneficiaryRecord beneficiaryRecord, String userId) {
 
         return BeneficiaryEntity.builder()
                 .id(UUID.randomUUID())
@@ -36,20 +39,30 @@ public class BeneficiaryMapper {
                 .state(beneficiaryRecord.getState())
                 .postCode(beneficiaryRecord.getPostCode())
                 .address(beneficiaryRecord.getAddress())
-                .verificationStatus(beneficiaryRecord.getVerificationStatus() != null ? beneficiaryRecord.getVerificationStatus() : "")
+                .verificationStatus(
+                        beneficiaryRecord.getVerificationStatus() != null ? beneficiaryRecord.getVerificationStatus()
+                                : "")
                 .address(beneficiaryRecord.getAddress())
                 .build();
     }
 
-    public List<BeneficiaryData> transformFromWalletDtoToBeneficiaryType(List<Wallet> walletDtos){
+    public List<BeneficiaryData> transformFromWalletDtoToBeneficiaryType(List<Wallet> walletDtos) {
 
         List<BeneficiaryData> beneficiaryDtoList = new ArrayList<>();
 
-        for(Wallet walletObject : walletDtos){
+        for (Wallet walletObject : walletDtos) {
+            String accountNumber = walletObject.getBankAccount().getAccountNumber();
+            String maskAccountNumber = maskAccountNumberFlag && StringUtils.isNotEmpty(accountNumber)
+                    && accountNumber.length() > 4
+                            ? maskString(accountNumber, 0, accountNumber.length() - 4, 'x')
+                            : accountNumber;
 
+            String displayName = walletObject.getBankAccount().getAccountHolderName();
+            String maskDisplayName = maskAccountNameFlag && StringUtils.isNotEmpty(displayName) ? maskName(displayName)
+                    : displayName;
             beneficiaryDtoList.add(BeneficiaryData.builder()
-                    .accountNumber(walletObject.getBankAccount().getAccountNumber())
-                    .displayName(walletObject.getBankAccount().getAccountHolderName())
+                    .accountNumber(maskAccountNumber)
+                    .displayName(maskDisplayName)
                     .paymentReference(walletObject.getBankAccount().getAccountId())
                     .build());
         }
@@ -57,7 +70,7 @@ public class BeneficiaryMapper {
         return beneficiaryDtoList;
     }
 
-    public BeneficiaryData transformFromBeneficiaryRecordToBeneficiaryDto(BeneficiaryRecord beneficiaryRecord){
+    public BeneficiaryData transformFromBeneficiaryRecordToBeneficiaryDto(BeneficiaryRecord beneficiaryRecord) {
 
         return BeneficiaryData.builder()
                 .accountNumber(beneficiaryRecord.getAccountNumber())
@@ -65,5 +78,56 @@ public class BeneficiaryMapper {
                 .paymentReference(beneficiaryRecord.getPaymentReference())
                 .build();
 
+    }
+
+    private String maskName(final String fullName) {
+        String[] arrName = fullName.split(" ");
+        StringBuilder sbName = new StringBuilder();
+        int index = 0;
+        for (String nameItem : arrName) {
+            if (index == 0) {
+                sbName.append(nameItem);
+            } else if (nameItem.length() >= 1) {
+                sbName.append(nameItem.substring(0, 1).toUpperCase() + ".");
+            }
+            sbName.append(" ");
+            index++;
+        }
+        return sbName.toString().trim();
+    }
+
+    private String maskString(String strText, int start, int end, char maskChar) {
+
+        if (strText == null || strText.equals("")) {
+            return "";
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+
+        if (end > strText.length()) {
+            end = strText.length();
+        }
+
+        if (start > end) {
+            return strText;
+        }
+
+        int maskLength = end - start;
+
+        if (maskLength == 0) {
+            return strText;
+        }
+
+        StringBuilder sbMaskString = new StringBuilder(maskLength);
+
+        for (int i = 0; i < maskLength; i++) {
+            sbMaskString.append(maskChar);
+        }
+
+        return strText.substring(0, start)
+                + sbMaskString.toString()
+                + strText.substring(start + maskLength);
     }
 }
