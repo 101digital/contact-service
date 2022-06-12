@@ -11,5 +11,7 @@
 			 relativeToChangelogFile="true" />
 	<include file="changelog/02-required-fields-update.xml"
 			 relativeToChangelogFile="true" />
+	<include file="changelog/03-add-unique-contact.xml"
+			 relativeToChangelogFile="true" />
 
 </databaseChangeLog>
