@@ -56,9 +56,6 @@
 		<spring-retry.version>1.2.2.RELEASE</spring-retry.version>
 		<javax.servlet.version>2.5</javax.servlet.version>
 
-		<spring.boot.ws.version>3.0.1.RELEASE</spring.boot.ws.version>
-		<velocity.version>1.7</velocity.version>
-		<velocity.tools.version>2.0</velocity.tools.version>
 		<hibernate.validator.version>6.0.11.Final</hibernate.validator.version>
 
 		<spring.kafka.version>2.3.10.RELEASE</spring.kafka.version>
@@ -164,6 +161,12 @@
 			<groupId>org.redisson</groupId>
 			<artifactId>redisson</artifactId>
 			<version>${redission.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.projectreactor/reactor-core -->
+		<dependency>
+		    <groupId>io.projectreactor</groupId>
+		    <artifactId>reactor-core</artifactId>
+		    <version>3.4.18</version>
 		</dependency>
 		<dependency>
 			<groupId>io.marketplace.commons</groupId>
