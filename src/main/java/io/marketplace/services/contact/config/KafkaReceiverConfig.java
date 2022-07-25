@@ -2,7 +2,10 @@ package io.marketplace.services.contact.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -14,15 +17,20 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @EnableKafka
 @Configuration
+@ConditionalOnProperty(value = "kafka.enabled", havingValue = "true")
 public class KafkaReceiverConfig {
 
     @Value("${kafka.server}")
     private String bootstrapServers;
+
+    @Autowired(required = false)
+    private KafkaProperties kafkaProperties;
 
     @Value("${kafka.groupid:wallet-processing-data-group}")
     private String consumerGroupId;
@@ -36,7 +44,9 @@ public class KafkaReceiverConfig {
 
     @Bean
     public Map<String, Object> consumerConfigs() {
-        Map<String, Object> props = new HashMap<>();
+        Map<String, Object> props = Optional.ofNullable(kafkaProperties)
+                .map(KafkaProperties::buildConsumerProperties)
+                .orElseGet(HashMap::new);
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
